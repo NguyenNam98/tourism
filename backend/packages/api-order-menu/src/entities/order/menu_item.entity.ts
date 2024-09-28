@@ -1,11 +1,14 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('menu_item')
+@Entity('menu_item', { schema: 'order' })
 export class MenuItem {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column('int')
+  @Column({ type: "bool", name: 'is_valid', default: true})
+  isValid!: boolean;
+
+  @Column('int', { name: 'status', default: 1 })
   status!: number; // 1: serve, 2: not serve
 
   @Column('uuid', { name: 'restaurant_id' })

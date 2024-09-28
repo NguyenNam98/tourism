@@ -71,7 +71,7 @@ async function createNestServer(serverExpress: express.Express) {
   );
   app.enableVersioning({
     type: VersioningType.URI,
-    prefix: 'api/book-tour/v',
+    prefix: 'api/order-menu/v',
   });
 
   app.use(
@@ -95,7 +95,7 @@ async function createNestServer(serverExpress: express.Express) {
     res.sendStatus(200);
   });
 
-  const isLocal = process.env.ENV === 'develop';
+  const isLocal = !process.env.ENV || process.env.ENV === 'develop';
   if (isLocal) {
     const config = new DocumentBuilder()
       .setTitle('Name service API')
