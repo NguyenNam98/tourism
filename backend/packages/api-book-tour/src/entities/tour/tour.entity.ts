@@ -1,21 +1,27 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('booking_tour')
-export class BookingTour {
+@Entity('tour', { schema: 'tour' })
+export class Tour {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column('uuid', { name: 'user_id' })
-  userId!: string;
-
-  @Column('uuid', { name: 'tour_id' })
-  tourId!: string;
-
-  @Column('varchar', { name: 'booked_at', length: 255 })
-  bookedAt!: string;
+  @Column( {type: "bool" , name: "is_valid", default: true})
+  isValid!: boolean;
 
   @Column('varchar', { length: 255 })
-  status!: string; // 0:in-progess, 1 paid, 2: canceled
+  title!: string;
+
+  @Column('text')
+  description!: string;
+
+  @Column('varchar', { length: 255 })
+  location!: string;
+
+  @Column('varchar', { length: 255 })
+  price!: string;
+
+  @Column('int', { name: 'max_participant' })
+  maxParticipant!: number;
 
   @CreateDateColumn({ type: "timestamp without time zone", name: "created_at" })
   createdAt!: Date;

@@ -1,30 +1,21 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('auth')
-export class Auth {
+@Entity('tour_services', { schema: 'tour' })
+export class TourServices {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @Column('varchar', { length: 255 })
-  role!: string;
+  title!: string;
+
+  @Column('text')
+  description!: string;
 
   @Column('varchar', { length: 255 })
-  permission!: string;
+  location!: string;
 
-  @Column('varchar', { length: 255 })
-  email!: string;
-
-  @Column('varchar', { name: 'user_name', length: 255 })
-  userName!: string;
-
-  @Column('varchar', { length: 255 })
-  password!: string;
-
-  @Column('varchar', { name: 'user_agent', length: 255 })
-  userAgent!: string;
-
-  @Column('varchar', { name: 'ip_address', length: 255 })
-  ipAddress!: string;
+  @Column('uuid', { name: 'tour_id' })
+  tourId!: string;
 
   @CreateDateColumn({ type: "timestamp without time zone", name: "created_at" })
   createdAt!: Date;

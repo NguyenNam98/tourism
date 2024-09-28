@@ -103,7 +103,7 @@ async function createNestServer(serverExpress: express.Express) {
       .setVersion('1.0')
       .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('swagger', app, document);
+    SwaggerModule.setup('api', app, document);
     await app.listen(PORT);
     console.log(`server listening at: http://localhost:${PORT}/`);
   }

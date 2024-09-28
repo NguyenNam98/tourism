@@ -24,7 +24,7 @@ COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
 # Expose the port the app runs on
-EXPOSE 7802
+EXPOSE 7801
 
 # Command to run the application
 CMD [ "/start.sh" ]

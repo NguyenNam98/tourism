@@ -13,7 +13,9 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npx rimraf dist && nest start -w",
     "lint": "eslint",
-    "test": "jest"
+    "test": "jest",
+    "aws": "node dist/main",
+    "build:aws": "nest build --prod"
   },
   "main": "dist/main.js",
   "dependencies": {

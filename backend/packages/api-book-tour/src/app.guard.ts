@@ -15,12 +15,18 @@ export class AppGuard implements CanActivate {
       ''
     const userAgent = request.headers['user-agent'] || ''
     const referer = request.headers['referer'] || ''
-    const auPayloadHeader = request.headers['idToken']
+    const auPayloadHeader = request.headers['au-payload']
+    let auPayload
+    try {
+      auPayload = JSON.parse(auPayloadHeader)
+    } catch (e) {
+      return false
+    }
     request.metaData = {
       ipAddress,
       userAgent,
       referer,
-      idToken: auPayloadHeader,
+      userId: auPayload.userId,
     } as TMetaData
     return true
   }

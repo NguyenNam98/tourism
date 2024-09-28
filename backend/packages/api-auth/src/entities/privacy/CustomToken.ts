@@ -32,3 +32,5 @@ export class CustomToken {
   @UpdateDateColumn({ type: "timestamp without time zone", name: "updated_at" })
   updatedAt!: Date;
 }
+
+
