@@ -45,7 +45,6 @@ export abstract class BasePasswordService implements PasswordServiceInterface{
 
     const token =  this.jwtTokenService.generateCustomToken({
       uid: userInfo.id,
-      tenant: userInfo.tenant,
       iat: Date.now(),
       aud: EAudience.FORGOT_PASSWORD
     }, CUSTOM_FORGOT_PASSWORD_TOKEN_LIFE_TIME)
@@ -63,7 +62,6 @@ export abstract class BasePasswordService implements PasswordServiceInterface{
         where: {
           email: email,
           isValid: true,
-          tenant: this.getTenant,
           userStatus: Not(Equal(StatusType.deleted)),
         }
       })
@@ -144,7 +142,6 @@ export abstract class BasePasswordService implements PasswordServiceInterface{
   async createCustomToken(uid: string) {
     const token = await this.jwtTokenService.generateCustomToken({
       uid,
-      tenant: this.getTenant,
       iat: Date.now(),
       aud: EAudience.CUSTOM_TOKEN
     }, CUSTOM_TOKEN_LIFE_TIME)

@@ -3,8 +3,6 @@ import { DynamicModule } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import {DATABASE_NAMES, ENV_LOCAL} from 'app.constant'
 import { map, find } from 'lodash'
-import {setEnvVariables} from "./app.config";
-
 
 export type TDatabase = {
   DB: string
@@ -14,7 +12,6 @@ export type TDatabase = {
 export class DatabaseModule {
   public static async forRoot(): Promise<DynamicModule> {
     const databases: string[] = map(Object.values(DATABASE_NAMES), 'DB')
-    await setEnvVariables()
     const modules = databases.map((key) => {
       const connection = find(Object.values(DATABASE_NAMES), { DB: key })
 
@@ -26,19 +23,13 @@ export class DatabaseModule {
         autoLoadEntities: true,
         replication: {
           master: {
-            host: process.env.DB_HOST,
-            port: parseInt(process.env.DB_PORT || '5432'),
-            username: process.env.DB_USERNAME,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_DATABASE,
+            // host: process.env.DB_HOST,
+            port: 5432,
+            // username: process.env.DB_USERNAME,
+            // password: process.env.DB_PASSWORD,
+            database: "postgres",
           },
-          slaves: process.env.ENV === ENV_LOCAL ? [] : [{
-            host: process.env.DB_HOST,
-            port: parseInt(process.env.DB_PORT || '5432'),
-            username: process.env.DB_USERNAME,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_HOST_SLAVE,
-          }],
+          slaves: [],
         },
         extra: {
           connectionLimit: 5,
