@@ -98,8 +98,8 @@ async function createNestServer(serverExpress: express.Express) {
   const isLocal = ! process.env.ENV || process.env.ENV === 'develop';
   if (isLocal) {
     const config = new DocumentBuilder()
-      .setTitle('Name service API')
-      .setDescription('The API for sample assist auth service')
+      .setTitle('API Authentication')
+      .setDescription('The API for Authentication service')
       .setVersion('1.0')
       .build();
     const document = SwaggerModule.createDocument(app, config);
