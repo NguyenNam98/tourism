@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import {tenantType} from "../entities/privacy/Auth";
 
 export interface accessTokenPayload {
 	uid: string;
