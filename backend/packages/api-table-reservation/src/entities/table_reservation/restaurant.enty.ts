@@ -1,15 +1,18 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('restaurant')
+@Entity('restaurant', { schema: 'reservation' })
 export class Restaurant {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column('int')
-  location!: number;
+  @Column({ type: "bool", name: 'is_valid', default: true})
+  isValid!: boolean;
 
-  @Column('int')
-  name!: number; // assuming this is an integer as per your description
+  @Column('text')
+  location!: string;
+
+  @Column('text')
+  name!: string; // assuming this is an integer as per your description
 
   @Column('text')
   description!: string;

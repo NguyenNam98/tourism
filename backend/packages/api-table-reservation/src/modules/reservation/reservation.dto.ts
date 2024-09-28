@@ -1,11 +1,12 @@
-import {IsNotEmpty, IsNumber, IsString} from "class-validator";
+import {IsDate, IsNotEmpty, IsNumber, IsString} from "class-validator";
 import {ApiProperty} from "@nestjs/swagger";
 
-export class CreateTourDto {
+
+export class CreateRestaurantDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  title: string;
+  name: string;
 
   @IsString()
   @IsNotEmpty()
@@ -16,31 +17,27 @@ export class CreateTourDto {
   @IsNotEmpty()
   @ApiProperty()
   location: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  price: string;
-
-  @IsNumber()
-  @IsNotEmpty()
-  @ApiProperty()
-  maxParticipant: number;
 }
 
-export class CreateTourServicesDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  title: string;
+export class CreateReservationDto {
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  description: string;
+  tableId: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  location: string;
+  note: string;
+
+  @IsDate()
+  @IsNotEmpty()
+  @ApiProperty()
+  startAt: Date;
+
+  @IsDate()
+  @IsNotEmpty()
+  @ApiProperty()
+  endAt!: Date;
 }
