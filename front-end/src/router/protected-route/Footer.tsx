@@ -1,11 +1,11 @@
-import { Flex } from 'antd'
+import { Flex } from "antd";
 
 const Footer = () => {
-	return (
-		<Flex justify={'center'}>
-			<div>{new Date().getFullYear()}</div>
-		</Flex>
-	)
-}
+  return (
+    <Flex justify={"center"}>
+      <div></div>
+    </Flex>
+  );
+};
 
-export default Footer
+export default Footer;
