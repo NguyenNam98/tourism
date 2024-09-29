@@ -1,7 +1,5 @@
-Welcome asssist backend
-
+table reservation
 ```bash
-cd functions
 
 yarn
 

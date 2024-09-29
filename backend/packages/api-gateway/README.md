@@ -1,5 +1,5 @@
-## Collection manager guard service
-
+### API Gateway
 ```commandline
+yarn
 yarn start
 ```

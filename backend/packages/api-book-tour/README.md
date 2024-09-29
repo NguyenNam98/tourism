@@ -1,7 +1,6 @@
-Welcome asssist backend
+book tour
 
 ```bash
-cd functions
 
 yarn
 

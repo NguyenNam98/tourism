@@ -1,7 +1,6 @@
-Welcome asssist backend
+##### Order
 
 ```bash
-cd functions
 
 yarn
 
