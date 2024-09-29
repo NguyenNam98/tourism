@@ -6,6 +6,22 @@
 3. set up config in all services database.ts
 4. run `yarn` in all services
 
+For Mac:
+brew install postgresql
+brew services start postgresql
+
+Connect to the PostgreSQL shell using: psql postgres
+
+
+Create a new database: CREATE DATABASE tourism;
+
+Execute the initial.sql file:
+psql -d tourism -f ./initial.sql
+
+Fix function uuid_generate_v4() does not exist: CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+psql -d tourism
+
+
 #### Start create 
 1. run `yarn start` in all services
 2. open swagger by url: http://localhost:[port]/api
