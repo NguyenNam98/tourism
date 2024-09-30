@@ -16,18 +16,6 @@ const Layout = ({ children }: LayoutProps) => {
     });
   }, [pathname]);
 
-  // this happens when user signs in or out
-  useEffect(() => {
-    // const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    // 	if (user) {
-    // 		await updateUserCredential({ user })
-    // 	} else {
-    // 		await signOut()
-    // 	}
-    // })
-    // return () => unsubscribe()
-  }, []);
-
   return (
     <Flex justify={"center"} component="main">
       <Flex

@@ -65,3 +65,6 @@ export enum TestType {
   HairDrugTest = 5,
   RapidUrineDrugScreen = 6,
 }
+
+export const avatarSrc =
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYTs3G0upBbTGLFnEsveMIyIe-VZCTD5MpvQ&s";
