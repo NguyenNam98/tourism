@@ -3,10 +3,12 @@ import type { IndexRouteProps, PathRouteProps } from "react-router-dom";
 import ThankYou from "~/components/ThankYouPage";
 import Home from "~/pages/home";
 import OnlineMenu from "~/pages/online-menu";
-import CurrentOrder from "~/pages/online-menu/CurrentOrder";
+import CheckoutOnlineMenu from "~/pages/online-menu/Checkout";
 import TableReservation from "~/pages/table-reservation";
+import CheckoutTableReservation from "~/pages/table-reservation/Checkout";
+import ListRestaurants from "~/pages/table-reservation/ListRestaurants";
 import TourBooking from "~/pages/tour-booking";
-import BookTourOrder from "~/pages/tour-booking/CurrentOrder";
+import CheckoutTourBooking from "~/pages/tour-booking/Checkout";
 
 // const Home = React.lazy(() => import('~/pages/home'))
 const LoginPage = React.lazy(() => import("~/pages/auth/Login.tsx"));
@@ -33,7 +35,7 @@ export const ROUTES: {
   },
   ONLINE_MENU_CHECKOUT: {
     path: "/online-menu/checkout",
-    element: <CurrentOrder />,
+    element: <CheckoutOnlineMenu />,
     isPrivate: true,
     index: true,
   },
@@ -50,9 +52,15 @@ export const ROUTES: {
     isPrivate: true,
     index: true,
   },
+  TABLE_RESERVATION_RESTAURANT: {
+    path: "/table-reservation/restaurant/:cuisineType",
+    element: <ListRestaurants />,
+    isPrivate: true,
+    index: true,
+  },
   TABLE_RESERVATION_CHECKOUT: {
-    path: "/table-reservation/checkout/:tourId",
-    element: <BookTourOrder />,
+    path: "/table-reservation/checkout/:restaurantId",
+    element: <CheckoutTableReservation />,
     isPrivate: true,
     index: true,
   },
@@ -64,7 +72,7 @@ export const ROUTES: {
   },
   TOUR_BOOKING_CHECKOUT: {
     path: "/tour-booking/checkout/:tourId",
-    element: <BookTourOrder />,
+    element: <CheckoutTourBooking />,
     isPrivate: true,
     index: true,
   },

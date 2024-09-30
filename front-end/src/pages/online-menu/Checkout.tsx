@@ -8,18 +8,19 @@ import {
   Form,
   Input,
   Radio,
+  TimePicker,
   Typography,
 } from "antd";
 import Meta from "antd/es/card/Meta";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { avatarSrc } from "~/utils/constants";
-import { listTours } from "./data";
+import { listFood } from "./data";
 
-export default function BookTourOrder() {
+export default function CheckoutOnlineMenu() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const { tourId } = useParams();
+
   return (
     <Container>
       <MainContent>
@@ -33,26 +34,47 @@ export default function BookTourOrder() {
             onClick={() => {
               navigate(-1);
             }}>
-            Select Tour
+            Custom Order
           </Button>
           <Avatar size={48} src={avatarSrc} />
         </HeaderContent>
         <Typography.Title>Current Order</Typography.Title>
 
-        {listTours
-          .filter((tour) => tour.id === +(tourId ?? 0))
-          .map((tour) => (
-            <StyledCard key={tour.id}>
-              <Meta
-                avatar={<Avatar src={tour.image} />}
-                title={tour.name}
-                description={tour.price.toString().concat(" per person")}
-              />
-            </StyledCard>
-          ))}
+        {listFood.slice(3).map((food) => (
+          <StyledCard key={food.id}>
+            <Meta
+              avatar={<Avatar src={food.image} />}
+              title={food.name}
+              description={food.price.toString().concat(" x 12 = 120$")}
+            />
+          </StyledCard>
+        ))}
+
+        <Typography.Title>Summary</Typography.Title>
+        <RowFlexBox>
+          <Typography.Text>Subtotal</Typography.Text>
+          <Typography.Text>120.0</Typography.Text>
+        </RowFlexBox>
+        <RowFlexBox>
+          <Typography.Text>Discount</Typography.Text>
+          <Typography.Text>0</Typography.Text>
+        </RowFlexBox>
+        <RowFlexBox>
+          <Typography.Text>Total Tax</Typography.Text>
+          <Typography.Text>0</Typography.Text>
+        </RowFlexBox>
+        <Divider style={{ padding: 0, margin: 0 }} />
+        <RowFlexBox>
+          <Typography.Text style={{ color: "#347928", fontWeight: 700 }}>
+            Total
+          </Typography.Text>
+          <Typography.Text style={{ color: "#347928", fontWeight: 700 }}>
+            120.0
+          </Typography.Text>
+        </RowFlexBox>
 
         <Form layout="vertical" form={form}>
-          <Typography.Title>Information</Typography.Title>
+          <Typography.Title>Customer Information</Typography.Title>
 
           <Form.Item label="Name">
             <Input placeholder="Vinh Nguyen" />
@@ -61,36 +83,29 @@ export default function BookTourOrder() {
             <Input placeholder="123 456 789" />
           </Form.Item>
 
-          <Form.Item label="Date">
-            <DatePicker placeholder="01/01/2026" style={{ width: "100%" }} />
+          <Typography.Title>Pickup Information</Typography.Title>
+          <Form.Item>
+            <RowFlexBox>
+              <Typography.Text>Address</Typography.Text>
+              <Typography.Text>90 Crown Street</Typography.Text>
+            </RowFlexBox>
+          </Form.Item>
+          <Form.Item>
+            <RowFlexBox>
+              <Typography.Text>Distance</Typography.Text>
+              <Typography.Text>0.2 meters</Typography.Text>
+            </RowFlexBox>
+          </Form.Item>
+          <Form.Item>
+            <RowFlexBox>
+              <Typography.Text>Date</Typography.Text>
+              <Typography.Text>{new Date().toDateString()}</Typography.Text>
+            </RowFlexBox>
           </Form.Item>
 
-          <Form.Item label="Number of people">
-            <Input type="number" placeholder="10" min={1} />
+          <Form.Item label="Pickup Time">
+            <TimePicker style={{ width: "100%" }} />
           </Form.Item>
-
-          <Typography.Title>Summary</Typography.Title>
-          <RowFlexBox>
-            <Typography.Text>Subtotal</Typography.Text>
-            <Typography.Text>120.0 x 10 persons</Typography.Text>
-          </RowFlexBox>
-          <RowFlexBox>
-            <Typography.Text>Discount</Typography.Text>
-            <Typography.Text>0</Typography.Text>
-          </RowFlexBox>
-          <RowFlexBox>
-            <Typography.Text>Total Tax</Typography.Text>
-            <Typography.Text>0</Typography.Text>
-          </RowFlexBox>
-          <Divider style={{ padding: 0, margin: 0 }} />
-          <RowFlexBox>
-            <Typography.Text style={{ color: "#347928", fontWeight: 700 }}>
-              Total
-            </Typography.Text>
-            <Typography.Text style={{ color: "#347928", fontWeight: 700 }}>
-              1200.0
-            </Typography.Text>
-          </RowFlexBox>
 
           <Typography.Title>Payment</Typography.Title>
           <Form.Item>
@@ -112,7 +127,7 @@ export default function BookTourOrder() {
               onClick={() => {
                 navigate("/thank-you");
               }}>
-              <CheckoutTitle>Book Now</CheckoutTitle>
+              <CheckoutTitle>Order Now</CheckoutTitle>
             </StickyBoxContent>
           </StickyBox>
         </Form>

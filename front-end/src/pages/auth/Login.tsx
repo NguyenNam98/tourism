@@ -68,6 +68,7 @@ export default function LoginPage() {
               size="large"
               placeholder="Enter email"
               prefix={<UserOutlined />}
+              value="vinhdep"
             />
           </Form.Item>
           <Form.Item name="password" rules={[{ required: true }]}>
@@ -78,6 +79,7 @@ export default function LoginPage() {
               iconRender={(visible) =>
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
               }
+              value="vinhdep"
             />
           </Form.Item>
         </div>
@@ -111,7 +113,6 @@ export default function LoginPage() {
             backgroundColor: SAColourScheme.NAVY,
             marginTop: 20,
           }}
-          // onClick={() => router.push('/homePage')}
           type="primary"
           size="large"
           htmlType="submit"
