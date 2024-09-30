@@ -10,7 +10,7 @@ import { Avatar, Badge, Button, Card, Image, Input, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { avatarSrc } from "~/utils/constants";
+import AvatarProfile from "~/components/AvatarProfile";
 import { listFood } from "./data";
 
 type SearchProps = GetProps<typeof Input.Search>;
@@ -35,7 +35,7 @@ export default function OnlineMenu() {
             onClick={() => {
               navigate(-1);
             }}></Button>
-          <Avatar size={48} src={avatarSrc} />
+          <AvatarProfile />
         </HeaderContent>
         <Typography.Title>Online Menu</Typography.Title>
         <Image

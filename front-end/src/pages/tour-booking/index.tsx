@@ -1,11 +1,11 @@
 import { LeftOutlined } from "@ant-design/icons";
 import type { GetProps } from "antd";
-import { Avatar, Button, Card, Image, Input, Typography } from "antd";
+import { Button, Card, Image, Input, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { avatarSrc } from "~/utils/constants";
 import { listTours } from "./data";
+import AvatarProfile from "~/components/AvatarProfile";
 
 type SearchProps = GetProps<typeof Input.Search>;
 const { Search } = Input;
@@ -29,7 +29,7 @@ export default function TourBooking() {
             onClick={() => {
               navigate(-1);
             }}></Button>
-          <Avatar size={48} src={avatarSrc} />
+          <AvatarProfile />
         </HeaderContent>
         <div
           style={{

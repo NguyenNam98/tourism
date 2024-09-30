@@ -13,7 +13,7 @@ import {
 import Meta from "antd/es/card/Meta";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { avatarSrc } from "~/utils/constants";
+import AvatarProfile from "~/components/AvatarProfile";
 import { listRestaurants } from "./data";
 
 export default function CheckoutTableReservation() {
@@ -36,7 +36,7 @@ export default function CheckoutTableReservation() {
             }}>
             Select Restaurant
           </Button>
-          <Avatar size={48} src={avatarSrc} />
+          <AvatarProfile />
         </HeaderContent>
         <Typography.Title>Current Order</Typography.Title>
 

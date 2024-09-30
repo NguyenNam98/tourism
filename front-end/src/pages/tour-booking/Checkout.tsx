@@ -13,8 +13,8 @@ import {
 import Meta from "antd/es/card/Meta";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { avatarSrc } from "~/utils/constants";
 import { listTours } from "./data";
+import AvatarProfile from "~/components/AvatarProfile";
 
 export default function CheckoutTourBooking() {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export default function CheckoutTourBooking() {
             }}>
             Select Tour
           </Button>
-          <Avatar size={48} src={avatarSrc} />
+          <AvatarProfile />
         </HeaderContent>
         <Typography.Title>Current Order</Typography.Title>
 

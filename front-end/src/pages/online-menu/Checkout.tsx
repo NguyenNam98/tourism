@@ -14,7 +14,7 @@ import {
 import Meta from "antd/es/card/Meta";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { avatarSrc } from "~/utils/constants";
+import AvatarProfile from "~/components/AvatarProfile";
 import { listFood } from "./data";
 
 export default function CheckoutOnlineMenu() {
@@ -36,7 +36,7 @@ export default function CheckoutOnlineMenu() {
             }}>
             Custom Order
           </Button>
-          <Avatar size={48} src={avatarSrc} />
+          <AvatarProfile />
         </HeaderContent>
         <Typography.Title>Current Order</Typography.Title>
 

@@ -2,7 +2,7 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { Avatar, Card, Carousel, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { avatarSrc } from "~/utils/constants";
+import AvatarProfile from "~/components/AvatarProfile";
 
 const { Meta } = Card;
 
@@ -14,7 +14,7 @@ export default function Home() {
       <MainContent>
         <HeaderContent>
           <Typography.Title level={4}>Hello Booker 👋</Typography.Title>
-          <Avatar size={48} src={avatarSrc} />
+          <AvatarProfile />
         </HeaderContent>
         <Typography.Text>
           Your Journey, Your Table, Your Adventure

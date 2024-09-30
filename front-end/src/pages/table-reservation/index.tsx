@@ -1,8 +1,8 @@
 import { LeftOutlined } from "@ant-design/icons";
-import { Avatar, Button, Typography } from "antd";
+import { Button, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { avatarSrc } from "~/utils/constants";
+import AvatarProfile from "~/components/AvatarProfile";
 
 export default function TableReservation() {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function TableReservation() {
             onClick={() => {
               navigate(-1);
             }}></Button>
-          <Avatar size={48} src={avatarSrc} />
+          <AvatarProfile />
         </HeaderContent>
         <Content>
           <TextContent>

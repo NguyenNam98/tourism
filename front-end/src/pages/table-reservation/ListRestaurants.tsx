@@ -1,10 +1,10 @@
 import { LeftOutlined } from "@ant-design/icons";
 import type { GetProps } from "antd";
-import { Avatar, Button, Card, Input, Typography } from "antd";
+import { Button, Card, Input, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { avatarSrc } from "~/utils/constants";
+import AvatarProfile from "~/components/AvatarProfile";
 import { listRestaurants } from "./data";
 
 type SearchProps = GetProps<typeof Input.Search>;
@@ -30,7 +30,7 @@ export default function ListRestaurants() {
             onClick={() => {
               navigate(-1);
             }}></Button>
-          <Avatar size={48} src={avatarSrc} />
+          <AvatarProfile />
         </HeaderContent>
         <Typography.Title>Table Reservation</Typography.Title>
         <Typography.Text>Where do you want to go?</Typography.Text>
