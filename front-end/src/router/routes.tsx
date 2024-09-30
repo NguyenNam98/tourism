@@ -1,11 +1,12 @@
 import React from "react";
 import type { IndexRouteProps, PathRouteProps } from "react-router-dom";
+import ThankYou from "~/components/ThankYouPage";
 import Home from "~/pages/home";
 import OnlineMenu from "~/pages/online-menu";
 import CurrentOrder from "~/pages/online-menu/CurrentOrder";
-import ThankYou from "~/pages/online-menu/ThankYou";
 import TableReservation from "~/pages/table-reservation";
 import TourBooking from "~/pages/tour-booking";
+import BookTourOrder from "~/pages/tour-booking/CurrentOrder";
 
 // const Home = React.lazy(() => import('~/pages/home'))
 const LoginPage = React.lazy(() => import("~/pages/auth/Login.tsx"));
@@ -36,8 +37,8 @@ export const ROUTES: {
     isPrivate: true,
     index: true,
   },
-  ONLINE_MENU_THANK_YOU: {
-    path: "/online-menu/thank-you",
+  THANK_YOU: {
+    path: "thank-you",
     element: <ThankYou />,
     isPrivate: true,
     index: true,
@@ -49,9 +50,21 @@ export const ROUTES: {
     isPrivate: true,
     index: true,
   },
+  TABLE_RESERVATION_CHECKOUT: {
+    path: "/table-reservation/checkout/:tourId",
+    element: <BookTourOrder />,
+    isPrivate: true,
+    index: true,
+  },
   TOUR_BOOKING: {
     path: "/tour-booking",
     element: <TourBooking />,
+    isPrivate: true,
+    index: true,
+  },
+  TOUR_BOOKING_CHECKOUT: {
+    path: "/tour-booking/checkout/:tourId",
+    element: <BookTourOrder />,
     isPrivate: true,
     index: true,
   },

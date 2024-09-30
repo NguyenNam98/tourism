@@ -29,7 +29,7 @@ export default function ThankYou() {
           </SuccessBox>
 
           <Typography.Title style={{ textAlign: "center" }}>
-            Thank you for ordering!
+            Thank you!
           </Typography.Title>
         </ContentDetail>
 
