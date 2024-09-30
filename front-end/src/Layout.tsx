@@ -1,5 +1,5 @@
 import { Flex } from "antd";
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 type LayoutProps = {
@@ -8,12 +8,17 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   const { pathname } = useLocation();
+
+  const childDivRef = useRef<HTMLDivElement>(null);
+
+  const scrollToTop = () => {
+    if (childDivRef.current) {
+      childDivRef.current.scrollTop = 0;
+    }
+  };
+
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
+    scrollToTop();
   }, [pathname]);
 
   return (
@@ -25,7 +30,17 @@ const Layout = ({ children }: LayoutProps) => {
           background: "linear-gradient(to right, #c31432, #240b36)",
         }}>
         <div className="smartphone">
-          <div className="content">{children}</div>
+          <div className="content">
+            <div
+              ref={childDivRef}
+              style={{
+                backgroundColor: "#ffffff",
+                overflowY: "auto",
+                height: "100%",
+              }}>
+              {children}
+            </div>
+          </div>
         </div>
       </Flex>
     </Flex>

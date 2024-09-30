@@ -8,28 +8,16 @@
  * - https://reactrouter.com/docs/en/v6/upgrading/v5#note-on-link-to-values
  */
 
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import ProtectedLayout from "./protected-route";
 import AuthLayout from "./public-route";
 import { privateRoutes, publicRoutes } from "./routes.tsx";
-import { useLocation } from "react-router-dom";
-
-const ScrollToTop = () => {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-};
 
 const Routings = () => {
   return (
     <>
-      <ScrollToTop />
       <Suspense>
         <Routes>
           <Route element={<AuthLayout />}>
