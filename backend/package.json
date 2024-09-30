@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "concurrently --names \"AUTH,BOOK-TOUR,GATEWAY,ORDER-MENU,TABLE-RESERVATION\" --prefix-colors \"blue,green,magenta,cyan,yellow\" \"yarn workspace api-auth start\" \"yarn workspace api-book-tour start\" \"yarn workspace api-gateway start\" \"yarn workspace api-order-menu start\" \"yarn workspace api-table-reservation start\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
