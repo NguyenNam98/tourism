@@ -2,6 +2,8 @@ import React from "react";
 import type { IndexRouteProps, PathRouteProps } from "react-router-dom";
 import Home from "~/pages/home";
 import OnlineMenu from "~/pages/online-menu";
+import CurrentOrder from "~/pages/online-menu/CurrentOrder";
+import ThankYou from "~/pages/online-menu/ThankYou";
 import TableReservation from "~/pages/table-reservation";
 import TourBooking from "~/pages/tour-booking";
 
@@ -13,6 +15,7 @@ export const ROUTES: {
     isPrivate: boolean;
     title?: string;
     path: string;
+    children?: (PathRouteProps | IndexRouteProps)[];
   };
 } = {
   HOME: {
@@ -27,6 +30,19 @@ export const ROUTES: {
     isPrivate: true,
     index: true,
   },
+  ONLINE_MENU_CHECKOUT: {
+    path: "/online-menu/checkout",
+    element: <CurrentOrder />,
+    isPrivate: true,
+    index: true,
+  },
+  ONLINE_MENU_THANK_YOU: {
+    path: "/online-menu/thank-you",
+    element: <ThankYou />,
+    isPrivate: true,
+    index: true,
+  },
+
   TABLE_RESERVATION: {
     path: "/table-reservation",
     element: <TableReservation />,

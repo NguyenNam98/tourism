@@ -8,38 +8,52 @@
  * - https://reactrouter.com/docs/en/v6/upgrading/v5#note-on-link-to-values
  */
 
-import { Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Suspense, useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 
-import ProtectedLayout from './protected-route'
-import AuthLayout from './public-route'
-import { privateRoutes, publicRoutes } from './routes.tsx'
+import ProtectedLayout from "./protected-route";
+import AuthLayout from "./public-route";
+import { privateRoutes, publicRoutes } from "./routes.tsx";
+import { useLocation } from "react-router-dom";
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 const Routings = () => {
-	return (
-		<Suspense>
-			<Routes>
-				<Route element={<AuthLayout />}>
-					{publicRoutes.map((routeProps) => (
-						<Route
-							{...routeProps}
-							key={`public-${routeProps.path as string}`}
-						/>
-					))}
-				</Route>
-				<Route element={<ProtectedLayout />}>
-					{privateRoutes.map(({ element, ...privateRouteProps }) => (
-						<Route
-							element={element}
-							{...privateRouteProps}
-							key={`privateRoute-${privateRouteProps.path}`}
-						/>
-					))}
-				</Route>
-				<Route path="*" element={<div>Not found</div>} />
-			</Routes>
-		</Suspense>
-	)
-}
+  return (
+    <>
+      <ScrollToTop />
+      <Suspense>
+        <Routes>
+          <Route element={<AuthLayout />}>
+            {publicRoutes.map((routeProps) => (
+              <Route
+                {...routeProps}
+                key={`public-${routeProps.path as string}`}
+              />
+            ))}
+          </Route>
+          <Route element={<ProtectedLayout />}>
+            {privateRoutes.map(({ element, ...privateRouteProps }) => (
+              <Route
+                element={element}
+                {...privateRouteProps}
+                key={`privateRoute-${privateRouteProps.path}`}
+              />
+            ))}
+          </Route>
+          <Route path="*" element={<div>Not found</div>} />
+        </Routes>
+      </Suspense>
+    </>
+  );
+};
 
-export default Routings
+export default Routings;
