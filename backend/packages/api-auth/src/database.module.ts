@@ -1,24 +1,23 @@
-
-import { DynamicModule } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import {DATABASE_NAMES, ENV_LOCAL} from 'app.constant'
-import { map, find } from 'lodash'
+import { DynamicModule } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { DATABASE_NAMES, ENV_LOCAL } from "app.constant";
+import { map, find } from "lodash";
 
 export type TDatabase = {
-  DB: string
-  NAME?: string
-}
+  DB: string;
+  NAME?: string;
+};
 
 export class DatabaseModule {
   public static async forRoot(): Promise<DynamicModule> {
-    const databases: string[] = map(Object.values(DATABASE_NAMES), 'DB')
+    const databases: string[] = map(Object.values(DATABASE_NAMES), "DB");
     const modules = databases.map((key) => {
-      const connection = find(Object.values(DATABASE_NAMES), { DB: key })
+      const connection = find(Object.values(DATABASE_NAMES), { DB: key });
 
       return TypeOrmModule.forRoot({
-        type: 'postgres',
+        type: "postgres",
         port: 5432,
-        entities: ['dist/entities/**/*{.ts,.js}'],
+        entities: ["dist/entities/**/*{.ts,.js}"],
         name: connection.NAME,
         autoLoadEntities: true,
         replication: {
@@ -27,24 +26,24 @@ export class DatabaseModule {
             port: 5432,
             // username: process.env.DB_USERNAME,
             // password: process.env.DB_PASSWORD,
-            database: "postgres",
+            database: "tourism",
           },
           slaves: [],
         },
         extra: {
           connectionLimit: 5,
         },
-        logging: process.env.ENV == 'develop' ? ['query', 'error'] : false,
-      })
-    })
+        logging: process.env.ENV == "develop" ? ["query", "error"] : false,
+      });
+    });
     return {
       module: DatabaseModule,
       imports: modules,
-    }
+    };
   }
 
   public static getConnectionName(dbName: TDatabase): string {
-    const _conn = find<TDatabase>(Object.values(DATABASE_NAMES), dbName)
-    return _conn.NAME
+    const _conn = find<TDatabase>(Object.values(DATABASE_NAMES), dbName);
+    return _conn.NAME;
   }
 }
