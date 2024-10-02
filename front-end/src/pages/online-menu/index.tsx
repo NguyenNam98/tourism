@@ -6,21 +6,49 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import type { GetProps } from "antd";
-import { Avatar, Badge, Button, Card, Image, Input, Typography } from "antd";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  Image,
+  Input,
+  message,
+  Typography,
+} from "antd";
 import Meta from "antd/es/card/Meta";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AvatarProfile from "~/components/AvatarProfile";
-import { listFood } from "./data";
+import { MenuItem, MenuService } from "~/services/menu";
 
 type SearchProps = GetProps<typeof Input.Search>;
 const { Search } = Input;
 
 export default function OnlineMenu() {
   const navigate = useNavigate();
+  const [menu, setMenu] = useState<MenuItem[]>([]);
 
-  const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
-    console.log(info?.source, value);
+  const onSearch: SearchProps["onSearch"] = (value) => {
+    const searchedMenu = menu.filter(
+      (food) => food.title.includes(value) || food.description.includes(value)
+    );
+    setMenu(searchedMenu);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await MenuService.getListMenuItems();
+        setMenu(response.data);
+      } catch (err) {
+        message.error("Failed to fetch restaurants.");
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Container>
@@ -54,7 +82,7 @@ export default function OnlineMenu() {
           style={{ width: "100%" }}
         />
 
-        {listFood.map((food) => (
+        {menu.map((food) => (
           <StyledCard
             key={food.id}
             actions={[
@@ -64,7 +92,7 @@ export default function OnlineMenu() {
             ]}>
             <Meta
               avatar={<Avatar src={food.image} />}
-              title={food.name}
+              title={food.title}
               description={food.price}
             />
           </StyledCard>
