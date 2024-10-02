@@ -1,11 +1,12 @@
 import { LeftOutlined } from "@ant-design/icons";
 import type { GetProps } from "antd";
-import { Button, Card, Input, Typography } from "antd";
+import { Button, Card, Input, message, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import AvatarProfile from "~/components/AvatarProfile";
-import { listRestaurants } from "./data";
+import { Restaurant, RestaurantService } from "~/services/restaurant";
 
 type SearchProps = GetProps<typeof Input.Search>;
 const { Search } = Input;
@@ -13,9 +14,31 @@ const { Search } = Input;
 export default function ListRestaurants() {
   const navigate = useNavigate();
   const { cuisineType } = useParams();
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
-  const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
-    console.log(info?.source, value);
+  const onSearch: SearchProps["onSearch"] = (value) => {
+    const searchedRestaurants = restaurants.filter(
+      (restaurant) =>
+        restaurant.name.includes(value) ||
+        restaurant.description.includes(value)
+    );
+    setRestaurants(searchedRestaurants);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await RestaurantService.getListRestaurantByType(
+          String(cuisineType)
+        );
+        setRestaurants(response.data);
+      } catch (err) {
+        message.error("Failed to fetch restaurants.");
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Container>
@@ -43,7 +66,7 @@ export default function ListRestaurants() {
         />
 
         <ListCardContent>
-          {listRestaurants
+          {restaurants
             .filter((res) => res.type === cuisineType)
             .map((res) => (
               <StyledCard
@@ -63,7 +86,7 @@ export default function ListRestaurants() {
                       {res.location}
                       <br />
                       <br />
-                      {res.about}
+                      {res.description}
                     </p>
                   }
                 />
