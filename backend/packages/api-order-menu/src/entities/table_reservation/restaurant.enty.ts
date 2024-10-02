@@ -1,21 +1,39 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-@Entity('restaurant', { schema: 'reservation' })
+@Entity("restaurant", { schema: "reservation" })
 export class Restaurant {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "bool", name: 'is_valid', default: true})
+  @Column({ type: "bool", name: "is_valid", default: true })
   isValid!: boolean;
 
-  @Column('text')
+  @Column("text")
   location!: string;
 
-  @Column('text')
-  name!: string; // assuming this is an integer as per your description
+  @Column("text")
+  name!: string;
 
-  @Column('text')
+  @Column("text")
   description!: string;
+
+  @Column({ type: "float", name: "price_range" })
+  priceRange!: number;
+
+  @Column("text")
+  image!: string;
+
+  @Column({ type: "float", default: 0 })
+  rating!: number;
+
+  @Column("text")
+  type!: string;
 
   @CreateDateColumn({ type: "timestamp without time zone", name: "created_at" })
   createdAt!: Date;

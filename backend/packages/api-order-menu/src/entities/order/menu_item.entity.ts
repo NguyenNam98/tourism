@@ -1,27 +1,36 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-@Entity('menu_item', { schema: 'order' })
+@Entity("menu_item", { schema: "order" })
 export class MenuItem {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "bool", name: 'is_valid', default: true})
-  isValid!: boolean;
-
-  @Column('int', { name: 'status', default: 1 })
+  @Column("int")
   status!: number; // 1: serve, 2: not serve
 
-  @Column('uuid', { name: 'restaurant_id' })
+  @Column("uuid", { name: "restaurant_id", nullable: true })
   restaurantId!: string;
 
-  @Column('varchar', { length: 255 })
+  @Column("varchar", { length: 255 })
   title!: string;
 
-  @Column('text')
+  @Column("text")
   description!: string;
 
-  @Column('varchar', { length: 255 })
-  price!: string;
+  @Column("float")
+  price!: number;
+
+  @Column("text")
+  image!: string;
+
+  @Column({ type: "float", default: 0 })
+  rating!: number;
 
   @CreateDateColumn({ type: "timestamp without time zone", name: "created_at" })
   createdAt!: Date;

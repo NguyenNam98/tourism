@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('order', { schema: 'order' })
+@Entity('order')
 export class Order {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
@@ -8,16 +8,7 @@ export class Order {
   @Column('uuid', { name: 'table_id' })
   tableId!: string;
 
-  @Column({ type: "bool", name: 'is_valid', default: true})
-  isValid!: boolean;
-
-  @Column('uuid', { name: 'restaurant_id' })
-  restaurantId!: string;
-
-  @Column('uuid', { name: 'user_id' })
-  userId!: string;
-
-  @Column('uuid', { array: true , default: []})
+  @Column('uuid', { array: true })
   items!: string[]; // array of UUIDs
 
   @Column('int')
