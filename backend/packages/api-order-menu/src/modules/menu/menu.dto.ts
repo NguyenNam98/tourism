@@ -1,5 +1,5 @@
-import {IsNotEmpty, IsString} from "class-validator";
-import {ApiProperty} from "@nestjs/swagger";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateMenuItemDto {
   @IsString()
@@ -12,8 +12,8 @@ export class CreateMenuItemDto {
   @ApiProperty()
   description: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  price: string;
+  price: number;
 }

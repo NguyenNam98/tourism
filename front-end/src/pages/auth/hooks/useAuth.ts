@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { useState } from "react";
 import { TAuth } from "~/entities";
 import { AuthService } from "~/services/auth";
@@ -21,6 +22,7 @@ export const useAuth = () => {
       setError(null);
     } catch (err) {
       const _error = err as Error;
+      message.error("Login Error");
       setError(_error?.message ?? "Login error");
     } finally {
       setLoading(false);

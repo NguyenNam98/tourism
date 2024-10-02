@@ -1,5 +1,5 @@
-import {IsNotEmpty, IsNumber, IsString} from "class-validator";
-import {ApiProperty} from "@nestjs/swagger";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateTourDto {
   @IsString()
@@ -17,10 +17,10 @@ export class CreateTourDto {
   @ApiProperty()
   location: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  price: string;
+  price: number;
 
   @IsNumber()
   @IsNotEmpty()

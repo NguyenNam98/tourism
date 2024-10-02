@@ -31,7 +31,7 @@ export const AuthService = {
     registerData: AuthRegisterUserDto
   ): Promise<TRegisterResponseDTO> => {
     return await post<TRegisterResponseDTO>(
-      `/${ServicePrefix.Auth}/register`,
+      `/${ServicePrefix.Auth}/tourism/register`,
       registerData
     );
   },
@@ -40,7 +40,7 @@ export const AuthService = {
     loginData: AuthLoginUserDto
   ): Promise<{ data: { userId: string } }> => {
     return await post<{ data: { userId: string } }>(
-      `/${ServicePrefix.Auth}/login`,
+      `/${ServicePrefix.Auth}/tourism/login`,
       loginData
     );
   },
@@ -49,7 +49,7 @@ export const AuthService = {
     refreshToken: string
   ): Promise<TRefreshTokenResponseDTO> => {
     return await get<TRefreshTokenResponseDTO>(
-      `/${ServicePrefix.Auth}/refresh`,
+      `/${ServicePrefix.Auth}/tourism/refresh`,
       {
         headers: {
           Authorization: `Bearer ${refreshToken}`,
@@ -59,6 +59,6 @@ export const AuthService = {
   },
 
   logout: async (): Promise<void> => {
-    return await post<void>(`/${ServicePrefix.Auth}/log-out`);
+    return await post<void>(`/${ServicePrefix.Auth}/tourism/log-out`);
   },
 };

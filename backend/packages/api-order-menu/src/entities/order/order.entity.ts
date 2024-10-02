@@ -1,17 +1,32 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-@Entity('order')
+@Entity("order")
 export class Order {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column('uuid', { name: 'table_id' })
+  @Column("boolean", { name: "is_valid" })
+  isValid!: boolean;
+
+  @Column("uuid", { name: "user_id" })
+  userId!: string;
+
+  @Column("uuid", { name: "restaurant_id" })
+  restaurantId!: string;
+
+  @Column("uuid", { name: "table_id" })
   tableId!: string;
 
-  @Column('uuid', { array: true })
+  @Column("uuid", { array: true })
   items!: string[]; // array of UUIDs
 
-  @Column('int')
+  @Column("int")
   status!: number; // 1: in-progress, 2: paid, 3: canceled
 
   @CreateDateColumn({ type: "timestamp without time zone", name: "created_at" })

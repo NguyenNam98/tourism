@@ -49,10 +49,10 @@ export class RestaurantController {
     };
   }
 
-  @Get("/list")
+  @Get("/list/:type")
   @UsePipes(ValidationPipe)
   async getListRestaurantByType(
-    @QueryParam("type") type: string
+    @Param("type") type: string
   ): Promise<TBaseDto<Restaurant[]>> {
     return {
       data: await this.restaurantService.getListRestaurantByType(type),

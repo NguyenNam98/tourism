@@ -11,6 +11,9 @@ export class MenuItem {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
+  @Column("boolean", { name: "is_valid" })
+  isValid!: boolean;
+
   @Column("int")
   status!: number; // 1: serve, 2: not serve
 

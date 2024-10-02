@@ -145,6 +145,7 @@ CREATE TABLE tour.tour (
 -- Tour services (additional services that can be part of the tour)
 CREATE TABLE tour.tour_services (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    is_valid BOOLEAN DEFAULT TRUE NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     location VARCHAR(255) NOT NULL,
@@ -156,6 +157,7 @@ CREATE TABLE tour.tour_services (
 -- Booking for tours
 CREATE TABLE tour.booking_tour (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    is_valid BOOLEAN DEFAULT TRUE NOT NULL,
     user_id UUID NOT NULL REFERENCES privacy.auth(id),
     tour_id UUID NOT NULL REFERENCES tour.tour(id),
     booked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
