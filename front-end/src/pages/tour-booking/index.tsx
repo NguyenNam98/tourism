@@ -1,20 +1,39 @@
 import { LeftOutlined } from "@ant-design/icons";
 import type { GetProps } from "antd";
-import { Button, Card, Image, Input, Typography } from "antd";
+import { Button, Card, Image, Input, message, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { listTours } from "./data";
 import AvatarProfile from "~/components/AvatarProfile";
+import { Tour, TourBookingService } from "~/services/tour";
 
 type SearchProps = GetProps<typeof Input.Search>;
 const { Search } = Input;
 
 export default function TourBooking() {
   const navigate = useNavigate();
+  const [tours, setTours] = useState<Tour[]>([]);
 
-  const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
-    console.log(info?.source, value);
+  const onSearch: SearchProps["onSearch"] = (value) => {
+    const searchedTours = tours.filter(
+      (tour) => tour.title.includes(value) || tour.description.includes(value)
+    );
+    setTours(searchedTours);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await TourBookingService.getListTour();
+        setTours(response.data);
+      } catch (err) {
+        message.error("Failed to fetch restaurants.");
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Container>
@@ -58,7 +77,7 @@ export default function TourBooking() {
         />
 
         <ListCardContent>
-          {listTours.map((tour) => (
+          {tours.map((tour) => (
             <StyledCard
               onClick={() => {
                 navigate(`/tour-booking/checkout/${tour.id}`);
@@ -69,7 +88,7 @@ export default function TourBooking() {
                 <CardText>A${tour.price}</CardText>,
                 <CardText>{tour.rating} ⭐</CardText>,
               ]}>
-              <Meta title={tour.name} description={tour.location} />
+              <Meta title={tour.title} description={tour.location} />
             </StyledCard>
           ))}
         </ListCardContent>
