@@ -1,9 +1,12 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('reservation')
+@Entity('reservation', { schema: 'reservation' })
 export class Reservation {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
+
+  @Column({ type: "bool", name: 'is_valid', default: true})
+  isValid!: boolean;
 
   @Column('uuid', { name: 'restaurant_id' })
   restaurantId!: string;
@@ -23,8 +26,8 @@ export class Reservation {
   @Column({ type: "timestamp without time zone", name: "end_at" })
   endAt!: Date;
 
-  @Column('int')
-  status!: number; // 0: in-progress, 1: finished, 2: canceled
+  @Column('int', { name: 'status', default: 1 })
+  status!: number; // 1: in-progress, 2: finished, 3: canceled
 
   @CreateDateColumn({ type: "timestamp without time zone", name: "created_at" })
   createdAt!: Date;
