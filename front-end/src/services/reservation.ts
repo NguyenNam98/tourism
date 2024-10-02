@@ -1,16 +1,21 @@
 import { get, post, put, ServicePrefix } from "./baseApiService";
-
 interface CreateReservationDto {
-  tableSize: number;
-  reservationTime: string;
+  tableId: string;
+  userId: string;
+  startAt: string;
+  endAt: string;
+  note: string;
 }
 
-interface Reservation {
+export interface Reservation {
   id: string;
   restaurantId: string;
-  tableSize: number;
-  reservationTime: string;
-  status: string;
+  tableId: string;
+  userId: string;
+  startAt: string;
+  endAt: string;
+  note: string;
+  status: number;
 }
 
 export const ReservationService = {
@@ -26,7 +31,7 @@ export const ReservationService = {
 
   cancelReservation: async (bookId: string): Promise<void> => {
     return await put(
-      `/${ServicePrefix.TableReservation}/reservation/cancel${bookId}`
+      `/${ServicePrefix.TableReservation}/reservation/cancel/${bookId}`
     );
   },
 

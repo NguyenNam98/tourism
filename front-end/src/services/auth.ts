@@ -36,8 +36,13 @@ export const AuthService = {
     );
   },
 
-  login: async (loginData: AuthLoginUserDto): Promise<void> => {
-    return await post<void>(`/${ServicePrefix.Auth}/login`, loginData);
+  login: async (
+    loginData: AuthLoginUserDto
+  ): Promise<{ data: { userId: string } }> => {
+    return await post<{ data: { userId: string } }>(
+      `/${ServicePrefix.Auth}/login`,
+      loginData
+    );
   },
 
   refreshToken: async (

@@ -4,6 +4,8 @@ interface CreateRestaurantDto {
   name: string;
   location: string;
   description: string;
+  priceRange: number;
+  image: string;
 }
 
 interface CreateRestaurantTableDto {
@@ -11,11 +13,16 @@ interface CreateRestaurantTableDto {
   tableNumber: number;
 }
 
-interface Restaurant {
+export interface Restaurant {
   id: string;
   name: string;
   location: string;
   description: string;
+  priceRange: number;
+  image: string;
+  rating: number;
+
+  type: string;
 }
 
 interface RestaurantTable {
@@ -45,6 +52,14 @@ export const RestaurantService = {
   }> => {
     return await get(
       `/${ServicePrefix.TableReservation}/restaurant/${restaurantId}`
+    );
+  },
+
+  getListRestaurantByType: async (
+    type: string
+  ): Promise<{ data: Restaurant[] }> => {
+    return await get(
+      `/${ServicePrefix.TableReservation}/restaurant/list/${type}`
     );
   },
 

@@ -1,35 +1,44 @@
 import { get, post, ServicePrefix } from "./baseApiService";
 
 interface CreateTourDto {
-  name: string;
+  title: string;
   description: string;
-  location?: string;
+  location: string;
+  price: number;
+  maxParticipant: number;
+  image: string;
 }
 
 interface CreateTourServicesDto {
-  serviceName: string;
-  serviceDescription: string;
-  additionalDetails?: string;
+  title: string;
+  description: string;
+  location: string;
 }
 
-interface Tour {
+export interface Tour {
   id: string;
-  name: string;
+  title: string;
   description: string;
-  location?: string;
+  location: string;
+  price: number;
+  maxParticipant: number;
+  image: string;
+  rating: number;
 }
 
 interface TourServices {
   id: string;
-  serviceName: string;
-  serviceDescription: string;
-  additionalDetails?: string;
+  title: string;
+  description: string;
+  location: string;
 }
 
 interface BookingTour {
   id: string;
   userId: string;
-  tour: Tour;
+  tourId: string;
+  bookedAt: string;
+  status: number;
 }
 
 export const TourBookingService = {

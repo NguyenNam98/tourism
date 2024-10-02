@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "https://localhost:7810";
+const API_BASE_URL = "http://localhost:7810/api";
 
 export enum ServicePrefix {
-  TourBooking = "book-tour",
-  TableReservation = "table-reservation",
-  OnlineMenu = "order-menu",
-  Auth = "auth",
+  TourBooking = "book-tour/v1",
+  TableReservation = "table-reservation/v1",
+  OnlineMenu = "order-menu/v1",
+  Auth = "auth/v1",
 }
 
 interface RequestOptions extends RequestInit {
   headers?: Record<string, string>;
 }
 
-const defaultHeaders = {
-  "Content-Type": "application/json",
+const getUserIdFromLocalStorage = () => {
+  return localStorage.getItem("userId") || "";
 };
 
 const baseApiService = async <T>(
@@ -22,6 +21,11 @@ const baseApiService = async <T>(
   options: RequestOptions = {}
 ): Promise<T> => {
   const { headers, ...restOptions } = options;
+
+  const defaultHeaders = {
+    "Content-Type": "application/json",
+    "au-payload": JSON.stringify({ userId: getUserIdFromLocalStorage() }),
+  };
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     headers: { ...defaultHeaders, ...headers },

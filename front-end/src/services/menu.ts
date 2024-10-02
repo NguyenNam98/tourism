@@ -1,17 +1,21 @@
 import { get, post, ServicePrefix } from "./baseApiService";
 
-// Interfaces for menu item operations
 interface CreateMenuItemDto {
-  name: string;
+  title: string;
   description: string;
   price: number;
+  image: string;
 }
 
-interface MenuItem {
+export interface MenuItem {
   id: string;
-  name: string;
+  title: string;
   description: string;
   price: number;
+  image: string;
+  rating: number;
+  is_valid: boolean;
+  status: number;
 }
 
 export const MenuService = {
@@ -33,5 +37,9 @@ export const MenuService = {
 
   getMenuItemById: async (menuItemId: string): Promise<{ data: MenuItem }> => {
     return await get(`/${ServicePrefix.OnlineMenu}/menu/item/${menuItemId}`);
+  },
+
+  getListMenuItems: async (): Promise<{ data: MenuItem[] }> => {
+    return await get(`/${ServicePrefix.OnlineMenu}/menu/`);
   },
 };
