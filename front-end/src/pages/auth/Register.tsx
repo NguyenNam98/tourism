@@ -2,11 +2,9 @@ import {
   EyeInvisibleOutlined,
   EyeTwoTone,
   LockOutlined,
-  MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Typography } from "antd";
-import { useEffect } from "react";
+import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "~/router/routes.tsx";
 import { SAColourScheme } from "~/utils/constants.ts";
@@ -17,23 +15,16 @@ interface FormRule {
   password: string;
 }
 
-export default function LoginPage() {
-  const { Link } = Typography;
+export default function RegisterPage() {
   const { signIn, loading } = useAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormRule>();
-
-  useEffect(() => {
-    form.setFieldsValue({
-      email: "vinhdep@gmail.com",
-      password: "Vinhdep@11",
-    });
-  }, []);
 
   const handleSubmit = async (values: FormRule) => {
     await signIn(values.email, values.password);
     navigate(ROUTES.HOME.path);
   };
+
   return (
     <div
       style={{
@@ -88,30 +79,16 @@ export default function LoginPage() {
               }
             />
           </Form.Item>
-        </div>
-        <div
-          style={{
-            justifyContent: "space-between",
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
-            gap: 20,
-          }}>
-          <Checkbox onChange={() => console.log("Remember me")}>
-            Remember Me
-          </Checkbox>
-          <div
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              display: "flex",
-              flexDirection: "row",
-            }}>
-            <MailOutlined style={{ paddingRight: 8 }} />
-            <Link href="https://ant.design" target="_blank">
-              Forgot password
-            </Link>
-          </div>
+          <Form.Item name="name" rules={[{ required: true }]}>
+            <Input.Password
+              size="large"
+              placeholder="Enter display name"
+              prefix={<LockOutlined />}
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
+            />
+          </Form.Item>
         </div>
         <Button
           style={{
@@ -123,7 +100,7 @@ export default function LoginPage() {
           size="large"
           htmlType="submit"
           loading={loading}>
-          Sign In
+          Register
         </Button>
       </Form>
     </div>
