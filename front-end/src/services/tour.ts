@@ -33,12 +33,18 @@ interface TourServices {
   location: string;
 }
 
-interface BookingTour {
+export interface BookingTour {
   id: string;
   userId: string;
   tourId: string;
-  bookedAt: string;
-  status: number;
+
+  date: string;
+  name: string;
+  mobile: string;
+  maxParticipants: number;
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
 }
 
 export const TourBookingService = {
@@ -71,12 +77,14 @@ export const TourBookingService = {
   },
 
   getBookedTours: async (): Promise<{
-    data: { tours: Tour[]; bookingTours: BookingTour[] };
+    data: BookingTour[];
   }> => {
     return await get(`/${ServicePrefix.TourBooking}/tour/book/list`);
   },
 
-  bookTour: async (tourId: string): Promise<{ data: string }> => {
-    return await get(`/${ServicePrefix.TourBooking}/tour/book/${tourId}`);
+  bookTour: async (
+    data: Omit<BookingTour, "id">
+  ): Promise<{ data: string }> => {
+    return await post(`/${ServicePrefix.TourBooking}/tour/book`, data);
   },
 };

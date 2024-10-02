@@ -1,4 +1,4 @@
-import { LeftOutlined } from "@ant-design/icons";
+import { LeftOutlined, LoadingOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
@@ -7,19 +7,41 @@ import {
   Divider,
   Form,
   Input,
+  message,
   Radio,
   Typography,
 } from "antd";
 import Meta from "antd/es/card/Meta";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { listTours } from "./data";
 import AvatarProfile from "~/components/AvatarProfile";
+import { Tour, TourBookingService } from "~/services/tour";
 
 export default function CheckoutTourBooking() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const { tourId } = useParams();
+  const [currentTour, setCurrentTour] = useState<Tour | null>(null);
+  const [participants, setParticipants] = useState<number>(0);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await TourBookingService.getDetailTour(String(tourId));
+        setCurrentTour(response.data);
+      } catch (err) {
+        message.error("Failed to fetch restaurants.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log(form.getFieldsValue());
+  }, [form]);
+
+  if (!currentTour) return <LoadingOutlined />;
   return (
     <Container>
       <MainContent>
@@ -39,40 +61,43 @@ export default function CheckoutTourBooking() {
         </HeaderContent>
         <Typography.Title>Current Order</Typography.Title>
 
-        {listTours
-          .filter((tour) => tour.id === +(tourId ?? 0))
-          .map((tour) => (
-            <StyledCard key={tour.id}>
-              <Meta
-                avatar={<Avatar src={tour.image} />}
-                title={tour.name}
-                description={tour.price.toString().concat(" per person")}
-              />
-            </StyledCard>
-          ))}
+        <StyledCard key={currentTour.id}>
+          <Meta
+            avatar={<Avatar src={currentTour.image} />}
+            title={currentTour.title}
+            description={currentTour.price.toString().concat("$ per person")}
+          />
+        </StyledCard>
 
         <Form layout="vertical" form={form}>
           <Typography.Title>Information</Typography.Title>
 
-          <Form.Item label="Name">
+          <Form.Item label="Name" name="name">
             <Input placeholder="Vinh Nguyen" />
           </Form.Item>
-          <Form.Item label="Mobile">
+          <Form.Item label="Mobile" name="mobile">
             <Input placeholder="123 456 789" />
           </Form.Item>
 
-          <Form.Item label="Date">
+          <Form.Item label="Date" name="date">
             <DatePicker placeholder="01/01/2026" style={{ width: "100%" }} />
           </Form.Item>
 
-          <Form.Item label="Number of person">
-            <Input type="number" placeholder="10" min={1} />
+          <Form.Item label="Number of person" name="maxParticipants">
+            <Input
+              type="number"
+              placeholder="10"
+              min={1}
+              onChange={(event) => setParticipants(+event.target.value)}
+            />
           </Form.Item>
 
           <Typography.Title>Summary</Typography.Title>
           <RowFlexBox>
             <Typography.Text>Subtotal</Typography.Text>
-            <Typography.Text>120.0 x 10 persons</Typography.Text>
+            <Typography.Text>
+              ${currentTour.price} x {participants} persons
+            </Typography.Text>
           </RowFlexBox>
           <RowFlexBox>
             <Typography.Text>Discount</Typography.Text>
@@ -88,7 +113,7 @@ export default function CheckoutTourBooking() {
               Total
             </Typography.Text>
             <Typography.Text style={{ color: "#347928", fontWeight: 700 }}>
-              1200.0
+              ${currentTour.price * participants}
             </Typography.Text>
           </RowFlexBox>
 
@@ -97,20 +122,37 @@ export default function CheckoutTourBooking() {
             <Radio checked={true}>Credit Card</Radio>
           </Form.Item>
 
-          <Form.Item label="Card Number">
+          <Form.Item label="Card Number" name="cardNumber">
             <Input placeholder="1234 5678 9101 1213" />
           </Form.Item>
-          <Form.Item label="Expiry Date">
+          <Form.Item label="Expiry Date" name="expiryDate">
             <DatePicker placeholder="01/01/2026" style={{ width: "100%" }} />
           </Form.Item>
-          <Form.Item label="CVV">
+          <Form.Item label="CVV" name="cvv">
             <Input placeholder="123" />
           </Form.Item>
 
           <StickyBox>
             <StickyBoxContent
               onClick={() => {
-                navigate("/thank-you");
+                const filledData = form.getFieldsValue();
+
+                try {
+                  TourBookingService.bookTour({
+                    userId: localStorage.getItem("userId") || "",
+                    tourId: String(tourId),
+                    date: filledData.date,
+                    name: filledData.name,
+                    mobile: filledData.mobile,
+                    maxParticipants: +filledData.maxParticipants,
+                    cardNumber: filledData.cardNumber,
+                    expiryDate: filledData.expiryDate,
+                    cvv: filledData.cvv,
+                  });
+                  navigate("/thank-you");
+                } catch (err) {
+                  message.error("Error when booking");
+                }
               }}>
               <CheckoutTitle>Book Now</CheckoutTitle>
             </StickyBoxContent>

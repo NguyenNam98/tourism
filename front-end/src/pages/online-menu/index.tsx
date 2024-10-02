@@ -31,8 +31,11 @@ export default function OnlineMenu() {
   const [menu, setMenu] = useState<MenuItem[]>([]);
 
   const onSearch: SearchProps["onSearch"] = (value) => {
+    const keyword = value.toLowerCase();
     const searchedMenu = menu.filter(
-      (food) => food.title.includes(value) || food.description.includes(value)
+      (food) =>
+        food.title.toLowerCase().includes(keyword) ||
+        food.description.toLowerCase().includes(keyword)
     );
     setMenu(searchedMenu);
   };

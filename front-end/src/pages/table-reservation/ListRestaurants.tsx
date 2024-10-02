@@ -17,10 +17,12 @@ export default function ListRestaurants() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
   const onSearch: SearchProps["onSearch"] = (value) => {
+    const keyword = value.toLowerCase();
+
     const searchedRestaurants = restaurants.filter(
       (restaurant) =>
-        restaurant.name.includes(value) ||
-        restaurant.description.includes(value)
+        restaurant.name.toLowerCase().includes(keyword) ||
+        restaurant.description.toLowerCase().includes(keyword)
     );
     setRestaurants(searchedRestaurants);
   };

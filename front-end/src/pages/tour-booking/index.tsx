@@ -1,4 +1,8 @@
-import { LeftOutlined } from "@ant-design/icons";
+import {
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+  LeftOutlined,
+} from "@ant-design/icons";
 import type { GetProps } from "antd";
 import { Button, Card, Image, Input, message, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
@@ -6,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AvatarProfile from "~/components/AvatarProfile";
-import { Tour, TourBookingService } from "~/services/tour";
+import { BookingTour, Tour, TourBookingService } from "~/services/tour";
 
 type SearchProps = GetProps<typeof Input.Search>;
 const { Search } = Input;
@@ -14,10 +18,16 @@ const { Search } = Input;
 export default function TourBooking() {
   const navigate = useNavigate();
   const [tours, setTours] = useState<Tour[]>([]);
+  const [bookedTours, setBookedTours] = useState<BookingTour[]>([]);
+  const [isOpenBookedTours, setIsOpenBookedTours] = useState<boolean>(false);
 
   const onSearch: SearchProps["onSearch"] = (value) => {
+    const keyword = value.toLowerCase();
+
     const searchedTours = tours.filter(
-      (tour) => tour.title.includes(value) || tour.description.includes(value)
+      (tour) =>
+        tour.title.toLowerCase().includes(keyword) ||
+        tour.description.toLowerCase().includes(keyword)
     );
     setTours(searchedTours);
   };
@@ -26,6 +36,9 @@ export default function TourBooking() {
     const fetchData = async () => {
       try {
         const response = await TourBookingService.getListTour();
+        const bookedTours = await TourBookingService.getBookedTours();
+
+        setBookedTours(bookedTours.data);
         setTours(response.data);
       } catch (err) {
         message.error("Failed to fetch restaurants.");
@@ -67,6 +80,49 @@ export default function TourBooking() {
           />
         </div>
 
+        <Button
+          type="primary"
+          icon={
+            isOpenBookedTours ? (
+              <ArrowUpOutlined style={{ color: "#000000" }} />
+            ) : (
+              <ArrowDownOutlined style={{ color: "#000000" }} />
+            )
+          }
+          onClick={() => {
+            setIsOpenBookedTours(!isOpenBookedTours);
+          }}>
+          Booked Tours
+        </Button>
+        {isOpenBookedTours && (
+          <ListCardContent>
+            {bookedTours.map((tour) => {
+              const selectedTour = tours.find((t) => t.id === tour.tourId);
+
+              return (
+                <StyledCard
+                  key={tour.id}
+                  cover={<Image src={selectedTour?.image} />}>
+                  <Meta
+                    title={selectedTour?.title}
+                    description={
+                      <>
+                        <CardText>
+                          Participants: {tour.maxParticipants}
+                        </CardText>
+                        <CardText>Date: {tour.date}</CardText>
+                        <CardText>
+                          Total: $
+                          {tour.maxParticipants * (selectedTour?.price || 0)}
+                        </CardText>
+                      </>
+                    }
+                  />
+                </StyledCard>
+              );
+            })}
+          </ListCardContent>
+        )}
         <Typography.Text>Where do you want to go?</Typography.Text>
 
         <Search

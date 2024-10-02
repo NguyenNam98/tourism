@@ -1,4 +1,12 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import {
+  IsCreditCard,
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateTourDto {
@@ -43,4 +51,41 @@ export class CreateTourServicesDto {
   @IsNotEmpty()
   @ApiProperty()
   location: string;
+}
+
+export class CreateBookingDto {
+  @IsOptional() // If userId can be empty or null
+  @IsString()
+  userId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  tourId: string;
+
+  @IsNotEmpty()
+  @IsDateString()
+  date: string;
+
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  mobile: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  maxParticipants: number;
+
+  @IsNotEmpty()
+  cardNumber: string;
+
+  @IsNotEmpty()
+  @IsDateString() // Assuming expiryDate is a date in ISO format (like "2023-12")
+  expiryDate: string;
+
+  @IsNotEmpty()
+  @IsString()
+  cvv: string;
 }

@@ -161,10 +161,18 @@ CREATE TABLE tour.booking_tour (
     user_id UUID NOT NULL REFERENCES privacy.auth(id),
     tour_id UUID NOT NULL REFERENCES tour.tour(id),
     booked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date TIMESTAMP NOT NULL, -- Assuming format "MM/YYYY"
     status INT DEFAULT 1 NOT NULL, -- 1: in-progress, 2: paid, 3: canceled
+    name VARCHAR NOT NULL,
+    mobile VARCHAR NOT NULL,
+    max_participants INT NOT NULL,
+    card_number VARCHAR NOT NULL,
+    expiry_date VARCHAR NOT NULL, -- Assuming format "MM/YYYY"
+    cvv VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
+
 
 -- ===========================
 -- Data Insertion (sample)
