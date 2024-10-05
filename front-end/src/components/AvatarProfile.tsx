@@ -7,14 +7,26 @@ export default function AvatarProfile() {
 
   const items: MenuProps["items"] = [
     {
+      key: "0",
+      label: (
+        <a
+          onClick={() => {
+            localStorage.clear();
+            navigate("/history");
+          }}>
+          History
+        </a>
+      ),
+    },
+    {
       key: "1",
       label: (
         <a
           onClick={() => {
-            sessionStorage.clear();
+            localStorage.clear();
             navigate("/login");
           }}>
-          SignOut
+          <b>SignOut</b>
         </a>
       ),
     },

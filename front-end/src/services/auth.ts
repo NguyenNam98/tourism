@@ -16,6 +16,8 @@ interface TRegisterResponseDTO {
   data: {
     uid: string;
   };
+  message?: string;
+  error?: string;
 }
 
 interface TRefreshTokenResponseDTO {
@@ -38,11 +40,12 @@ export const AuthService = {
 
   login: async (
     loginData: AuthLoginUserDto
-  ): Promise<{ data: { userId: string } }> => {
-    return await post<{ data: { userId: string } }>(
-      `/${ServicePrefix.Auth}/tourism/login`,
-      loginData
-    );
+  ): Promise<{
+    data: { userId: string; userData: any };
+    error?: string;
+    message?: string;
+  }> => {
+    return await post(`/${ServicePrefix.Auth}/tourism/login`, loginData);
   },
 
   refreshToken: async (

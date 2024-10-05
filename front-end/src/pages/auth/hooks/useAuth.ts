@@ -13,13 +13,18 @@ export const useAuth = () => {
   const signIn = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const data = await AuthService.login({
+      const response = await AuthService.login({
         email: email,
         password: password,
       });
-      localStorage.setItem("userId", data.data.userId);
-      updateUserCredential({ user: {} });
-      setError(null);
+
+      if (response.data && response.data.userId) {
+        localStorage.setItem("userId", response.data.userId);
+        updateUserCredential({ user: response.data.userData });
+        setError(null);
+      } else {
+        setError(response.message ?? "Invalid information");
+      }
     } catch (err) {
       const _error = err as Error;
       message.error("Login Error");
@@ -34,7 +39,7 @@ export const useAuth = () => {
   };
 
   const signOut = async () => {
-    // await signOutFirebase(auth)
+    localStorage.clear();
   };
 
   return { signIn, signOut, loading, error, updateUserCredential };

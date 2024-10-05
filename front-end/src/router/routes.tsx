@@ -1,6 +1,8 @@
 import React from "react";
 import type { IndexRouteProps, PathRouteProps } from "react-router-dom";
 import ThankYou from "~/components/ThankYouPage";
+import RegisterPage from "~/pages/auth/Register";
+import History from "~/pages/history";
 import Home from "~/pages/home";
 import OnlineMenu from "~/pages/online-menu";
 import CheckoutOnlineMenu from "~/pages/online-menu/Checkout";
@@ -80,6 +82,17 @@ export const ROUTES: {
     path: "/login",
     element: <LoginPage />,
     isPrivate: false,
+  },
+  REGISTER: {
+    path: "/register",
+    element: <RegisterPage />,
+    isPrivate: false,
+  },
+  HISTORY: {
+    path: "/history",
+    element: <History />,
+    isPrivate: true,
+    index: true,
   },
 };
 

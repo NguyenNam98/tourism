@@ -2,9 +2,8 @@ import { Flex } from "antd";
 import { Fragment, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-import { useToken } from "~/store/features/auth/selectors.ts";
 const AuthLayout = ({ redirectTo = "/" }) => {
-  const token = useToken();
+  const token = localStorage.getItem("userId");
   const navigate = useNavigate();
 
   useEffect(() => {

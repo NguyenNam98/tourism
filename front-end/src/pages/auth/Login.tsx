@@ -2,11 +2,9 @@ import {
   EyeInvisibleOutlined,
   EyeTwoTone,
   LockOutlined,
-  MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Typography } from "antd";
-import { useEffect } from "react";
+import { Button, Form, Input, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "~/router/routes.tsx";
 import { SAColourScheme } from "~/utils/constants.ts";
@@ -19,48 +17,45 @@ interface FormRule {
 
 export default function LoginPage() {
   const { Link } = Typography;
-  const { signIn, loading } = useAuth();
+  const { signIn, loading, error } = useAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormRule>();
 
-  useEffect(() => {
-    form.setFieldsValue({
-      email: "vinhdep@gmail.com",
-      password: "Vinhdep@11",
-    });
-  }, []);
-
   const handleSubmit = async (values: FormRule) => {
     await signIn(values.email, values.password);
-    navigate(ROUTES.HOME.path);
+
+    if (!error) {
+      navigate(ROUTES.HOME.path);
+    }
   };
+
   return (
     <div
       style={{
         backgroundColor: SAColourScheme.WHITE,
         borderRadius: 20,
         opacity: 0.96,
-        justifyContent: "space-around",
+        justifyContent: "center",
         alignItems: "center",
         display: "flex",
         flexDirection: "column",
         width: "100%",
         height: "100%",
-        padding: "3rem 2rem",
+        padding: "2rem",
       }}>
       <img
         src={
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI-h-e2hgz8mwGfCt4gvj4IgMG_wAUolVM6w&s"
+          "https://png.pngtree.com/png-clipart/20230802/original/pngtree-summer-vacation-cartoon-with-travel-essentials-and-tourism-items-picture-image_7831681.png"
         }
         alt="Work Assist Logo"
-        width={80}
-        height={60}
+        width={250}
+        height={250}
       />
       <Form
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 20,
+
           width: "100%",
         }}
         form={form}
@@ -69,7 +64,6 @@ export default function LoginPage() {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 20,
           }}>
           <Form.Item name="email" rules={[{ required: true }]}>
             <Input
@@ -89,30 +83,7 @@ export default function LoginPage() {
             />
           </Form.Item>
         </div>
-        <div
-          style={{
-            justifyContent: "space-between",
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
-            gap: 20,
-          }}>
-          <Checkbox onChange={() => console.log("Remember me")}>
-            Remember Me
-          </Checkbox>
-          <div
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              display: "flex",
-              flexDirection: "row",
-            }}>
-            <MailOutlined style={{ paddingRight: 8 }} />
-            <Link href="https://ant.design" target="_blank">
-              Forgot password
-            </Link>
-          </div>
-        </div>
+
         <Button
           style={{
             textAlign: "center",
@@ -125,6 +96,34 @@ export default function LoginPage() {
           loading={loading}>
           Sign In
         </Button>
+
+        <div
+          style={{
+            justifyContent: "space-between",
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}>
+          <div
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "row",
+              marginTop: "1rem",
+            }}>
+            <Link onClick={() => navigate("/register")}>
+              Don't have an account?{" "}
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: SAColourScheme.NAVY,
+                }}>
+                Register!
+              </span>
+            </Link>
+          </div>
+        </div>
       </Form>
     </div>
   );

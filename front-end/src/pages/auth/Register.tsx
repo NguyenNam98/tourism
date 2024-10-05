@@ -1,28 +1,37 @@
 import {
+  AliwangwangOutlined,
   EyeInvisibleOutlined,
   EyeTwoTone,
   LockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "~/router/routes.tsx";
+import { AuthService } from "~/services/auth";
 import { SAColourScheme } from "~/utils/constants.ts";
-import { useAuth } from "./hooks";
 
 interface FormRule {
   email: string;
   password: string;
+  username: string;
 }
 
 export default function RegisterPage() {
-  const { signIn, loading } = useAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormRule>();
 
   const handleSubmit = async (values: FormRule) => {
-    await signIn(values.email, values.password);
-    navigate(ROUTES.HOME.path);
+    const response = await AuthService.register(values);
+
+    if (response.data && response.data.uid) {
+      message.success("You have successfully registered");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } else {
+      message.error(response.message);
+    }
   };
 
   return (
@@ -31,27 +40,27 @@ export default function RegisterPage() {
         backgroundColor: SAColourScheme.WHITE,
         borderRadius: 20,
         opacity: 0.96,
-        justifyContent: "space-around",
+        justifyContent: "center",
         alignItems: "center",
         display: "flex",
         flexDirection: "column",
         width: "100%",
         height: "100%",
-        padding: "3rem 2rem",
+        padding: "2rem",
       }}>
       <img
         src={
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI-h-e2hgz8mwGfCt4gvj4IgMG_wAUolVM6w&s"
+          "https://png.pngtree.com/png-clipart/20230802/original/pngtree-summer-vacation-cartoon-with-travel-essentials-and-tourism-items-picture-image_7831681.png"
         }
         alt="Work Assist Logo"
-        width={80}
-        height={60}
+        width={250}
+        height={250}
       />
       <Form
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 20,
+
           width: "100%",
         }}
         form={form}
@@ -60,7 +69,6 @@ export default function RegisterPage() {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 20,
           }}>
           <Form.Item name="email" rules={[{ required: true }]}>
             <Input
@@ -79,14 +87,11 @@ export default function RegisterPage() {
               }
             />
           </Form.Item>
-          <Form.Item name="name" rules={[{ required: true }]}>
-            <Input.Password
+          <Form.Item name="username" rules={[{ required: true }]}>
+            <Input
               size="large"
               placeholder="Enter display name"
-              prefix={<LockOutlined />}
-              iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
+              prefix={<AliwangwangOutlined />}
             />
           </Form.Item>
         </div>
@@ -98,10 +103,37 @@ export default function RegisterPage() {
           }}
           type="primary"
           size="large"
-          htmlType="submit"
-          loading={loading}>
+          htmlType="submit">
           Register
         </Button>
+        <div
+          style={{
+            justifyContent: "space-between",
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+            gap: 20,
+          }}>
+          <div
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "row",
+              marginTop: "1rem",
+            }}>
+            <Typography.Link onClick={() => navigate("/login")}>
+              Already have an account?{" "}
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: SAColourScheme.NAVY,
+                }}>
+                Login!
+              </span>
+            </Typography.Link>
+          </div>
+        </div>
       </Form>
     </div>
   );
