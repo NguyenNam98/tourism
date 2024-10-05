@@ -30,7 +30,7 @@ export default function RegisterPage() {
         navigate("/login");
       }, 2000);
     } else {
-      message.error(response.message);
+      message.error(response.message ?? response.error);
     }
   };
 

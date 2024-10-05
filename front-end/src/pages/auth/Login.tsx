@@ -6,7 +6,6 @@ import {
 } from "@ant-design/icons";
 import { Button, Form, Input, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "~/router/routes.tsx";
 import { SAColourScheme } from "~/utils/constants.ts";
 import { useAuth } from "./hooks";
 
@@ -17,16 +16,12 @@ interface FormRule {
 
 export default function LoginPage() {
   const { Link } = Typography;
-  const { signIn, loading, error } = useAuth();
+  const { signIn, loading } = useAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormRule>();
 
   const handleSubmit = async (values: FormRule) => {
     await signIn(values.email, values.password);
-
-    if (!error) {
-      navigate(ROUTES.HOME.path);
-    }
   };
 
   return (
