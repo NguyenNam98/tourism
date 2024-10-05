@@ -7,19 +7,66 @@ import {
   Divider,
   Form,
   Input,
+  message,
   Radio,
   TimePicker,
   Typography,
 } from "antd";
 import Meta from "antd/es/card/Meta";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AvatarProfile from "~/components/AvatarProfile";
-import { listFood } from "./data";
+import { MenuItem } from "~/services/menu";
+import { Order, OrderService } from "~/services/order";
+import dayjs, { Dayjs } from "dayjs";
 
 export default function CheckoutOnlineMenu() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const location = useLocation();
+  const orderFood = location.state as (MenuItem & {
+    quantity: number;
+  })[];
+
+  const [orderInfo, setOrderInfo] = useState<Partial<Order>>({
+    name: "",
+    mobile: "",
+    date: new Date(),
+    cardNumber: "",
+    expiryDate: new Date(),
+    cvv: "",
+    orderItems: orderFood.map((item) => ({
+      id: item.id,
+      price: item.price,
+      quantity: item.quantity,
+    })),
+    total: orderFood.reduce((acc, item) => {
+      return acc + item.quantity * item.price;
+    }, 0),
+  });
+
+  const updateOrder = async (data: Partial<Order>) => {
+    setOrderInfo({
+      ...orderInfo,
+      ...data,
+    });
+  };
+
+  const combineDateTime = (
+    date: Dayjs | null,
+    time: Dayjs | null
+  ): Date | null => {
+    if (!date || !time) return date ? date.toDate() : null;
+
+    const combinedDate = date
+      .set("hour", time.hour())
+      .set("minute", time.minute())
+      .set("second", 0)
+      .set("millisecond", 0);
+
+    return combinedDate.toDate();
+  };
 
   return (
     <Container>
@@ -39,12 +86,14 @@ export default function CheckoutOnlineMenu() {
         </HeaderContent>
         <Typography.Title>Current Order</Typography.Title>
 
-        {listFood.slice(3).map((food) => (
+        {orderFood.map((food) => (
           <StyledCard key={food.id}>
             <Meta
               avatar={<Avatar src={food.image} />}
-              title={food.name}
-              description={food.price.toString().concat(" x 12 = 120$")}
+              title={food.title}
+              description={`${food.price} x ${food.quantity} = ${
+                food.price * food.quantity
+              }$`}
             />
           </StyledCard>
         ))}
@@ -52,7 +101,7 @@ export default function CheckoutOnlineMenu() {
         <Typography.Title>Summary</Typography.Title>
         <RowFlexBox>
           <Typography.Text>Subtotal</Typography.Text>
-          <Typography.Text>120.0</Typography.Text>
+          <Typography.Text>{orderInfo.total} $</Typography.Text>
         </RowFlexBox>
         <RowFlexBox>
           <Typography.Text>Discount</Typography.Text>
@@ -68,7 +117,7 @@ export default function CheckoutOnlineMenu() {
             Total
           </Typography.Text>
           <Typography.Text style={{ color: "#347928", fontWeight: 700 }}>
-            120.0
+            {orderInfo.total} $
           </Typography.Text>
         </RowFlexBox>
 
@@ -76,10 +125,16 @@ export default function CheckoutOnlineMenu() {
           <Typography.Title>Customer Information</Typography.Title>
 
           <Form.Item label="Name">
-            <Input placeholder="Vinh Nguyen" />
+            <Input
+              placeholder="Vinh Nguyen"
+              onChange={(event) => updateOrder({ name: event.target.value })}
+            />
           </Form.Item>
           <Form.Item label="Mobile">
-            <Input placeholder="123 456 789" />
+            <Input
+              placeholder="123 456 789"
+              onChange={(event) => updateOrder({ mobile: event.target.value })}
+            />
           </Form.Item>
 
           <Typography.Title>Pickup Information</Typography.Title>
@@ -95,15 +150,31 @@ export default function CheckoutOnlineMenu() {
               <Typography.Text>0.2 meters</Typography.Text>
             </RowFlexBox>
           </Form.Item>
-          <Form.Item>
-            <RowFlexBox>
-              <Typography.Text>Date</Typography.Text>
-              <Typography.Text>{new Date().toDateString()}</Typography.Text>
-            </RowFlexBox>
+          <Form.Item label="Date">
+            <DatePicker
+              placeholder="01/01/2026"
+              style={{ width: "100%" }}
+              onChange={(date: Dayjs | null) => {
+                const currentTime = dayjs(orderInfo?.date);
+                const combined = combineDateTime(date, currentTime);
+                updateOrder({
+                  date: combined ? combined : undefined,
+                });
+              }}
+            />
           </Form.Item>
-
-          <Form.Item label="Pickup Time">
-            <TimePicker style={{ width: "100%" }} />
+          <Form.Item label="Time">
+            <TimePicker
+              placeholder="11:00"
+              style={{ width: "100%" }}
+              onChange={(time: Dayjs | null) => {
+                const currentDate = dayjs(orderInfo?.date);
+                const combined = combineDateTime(currentDate, time);
+                updateOrder({
+                  date: combined ? combined : undefined,
+                });
+              }}
+            />
           </Form.Item>
 
           <Typography.Title>Payment</Typography.Title>
@@ -112,19 +183,41 @@ export default function CheckoutOnlineMenu() {
           </Form.Item>
 
           <Form.Item label="Card Number">
-            <Input placeholder="1234 5678 9101 1213" />
+            <Input
+              placeholder="1234 5678 9101 1213"
+              onChange={(event) =>
+                updateOrder({ cardNumber: event.target.value })
+              }
+            />
           </Form.Item>
           <Form.Item label="Expiry Date">
-            <DatePicker placeholder="01/01/2026" style={{ width: "100%" }} />
+            <DatePicker
+              placeholder="01/01/2026"
+              style={{ width: "100%" }}
+              onChange={(event) =>
+                updateOrder({ expiryDate: dayjs(event).toDate() })
+              }
+            />
           </Form.Item>
           <Form.Item label="CVV">
-            <Input placeholder="123" />
+            <Input
+              placeholder="123"
+              onChange={(event) => updateOrder({ cvv: event.target.value })}
+            />
           </Form.Item>
 
           <StickyBox>
             <StickyBoxContent
               onClick={() => {
-                navigate("/thank-you");
+                try {
+                  OrderService.createOrder({
+                    userId: localStorage.getItem("userId") || "",
+                    ...orderInfo,
+                  });
+                  navigate("/thank-you");
+                } catch (err) {
+                  message.error("Error when booking");
+                }
               }}>
               <CheckoutTitle>Order Now</CheckoutTitle>
             </StickyBoxContent>

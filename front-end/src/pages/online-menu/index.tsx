@@ -28,7 +28,7 @@ const { Search } = Input;
 
 export default function OnlineMenu() {
   const navigate = useNavigate();
-  const [menu, setMenu] = useState<MenuItem[]>([]);
+  const [menu, setMenu] = useState<(MenuItem & { quantity: number })[]>([]);
 
   const onSearch: SearchProps["onSearch"] = (value) => {
     const keyword = value.toLowerCase();
@@ -44,7 +44,12 @@ export default function OnlineMenu() {
     const fetchData = async () => {
       try {
         const response = await MenuService.getListMenuItems();
-        setMenu(response.data);
+        setMenu(
+          response.data.map((item) => ({
+            ...item,
+            quantity: 0,
+          }))
+        );
       } catch (err) {
         message.error("Failed to fetch restaurants.");
       }
@@ -74,8 +79,7 @@ export default function OnlineMenu() {
         />
         <Typography.Text>What are you going to eat today?</Typography.Text>
         <Typography.Text>
-          <EnvironmentOutlined />
-          Wollongong, Australia
+          <EnvironmentOutlined /> Wollongong, Australia
         </Typography.Text>
         <Search
           placeholder="Search here..."
@@ -88,9 +92,41 @@ export default function OnlineMenu() {
           <StyledCard
             key={food.id}
             actions={[
-              <MinusOutlined key="minus" />,
-              <QuantityNumber>1</QuantityNumber>,
-              <PlusOutlined key="add" />,
+              <MinusOutlined
+                key="minus"
+                onClick={() => {
+                  if (food.quantity <= 0) return;
+
+                  const newMenu = menu.map((item) => {
+                    if (item.id === food.id) {
+                      return {
+                        ...item,
+                        quantity: --item.quantity,
+                      };
+                    }
+                    return item;
+                  });
+
+                  setMenu(newMenu);
+                }}
+              />,
+              <QuantityNumber>{food.quantity}</QuantityNumber>,
+              <PlusOutlined
+                key="add"
+                onClick={() => {
+                  const newMenu = menu.map((item) => {
+                    if (item.id === food.id) {
+                      return {
+                        ...item,
+                        quantity: ++item.quantity,
+                      };
+                    }
+                    return item;
+                  });
+
+                  setMenu(newMenu);
+                }}
+              />,
             ]}>
             <Meta
               avatar={<Avatar src={food.image} />}
@@ -102,12 +138,24 @@ export default function OnlineMenu() {
         <CheckoutBox>
           <CheckoutWrapper
             onClick={() => {
-              navigate("/online-menu/checkout");
+              const orderedItems = menu.filter((item) => item.quantity > 0);
+
+              if (orderedItems.length <= 0) return;
+              navigate("/online-menu/checkout", {
+                state: menu.filter((item) => item.quantity > 0),
+              });
             }}>
             <CheckoutTitle>Checkout</CheckoutTitle>
             <MyCartTitle>
               <ShoppingCartOutlined />
-              My Cart <Badge count={0} showZero color="#001F3F" />
+              My Cart{" "}
+              <Badge
+                count={menu.reduce((acc, item) => {
+                  return acc + item.quantity;
+                }, 0)}
+                showZero
+                color="#001F3F"
+              />
             </MyCartTitle>
           </CheckoutWrapper>
         </CheckoutBox>
