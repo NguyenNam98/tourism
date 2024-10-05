@@ -5,66 +5,118 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Button, Menu } from "antd";
+import { Button, Divider, Menu, message, Typography } from "antd";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AvatarProfile from "~/components/AvatarProfile";
+import { Order, OrderService } from "~/services/order";
+import { Reservation, ReservationService } from "~/services/reservation";
+import { BookingTour, TourBookingService } from "~/services/tour";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
-const items: MenuItem[] = [
-  {
-    key: "1",
-    icon: <MailOutlined />,
-    label: "Online Menu",
-    children: [
-      { key: "11", label: "Option 1" },
-      { key: "12", label: "Option 2" },
-      { key: "13", label: "Option 3" },
-      { key: "14", label: "Option 4" },
-    ],
-  },
-  {
-    key: "2",
-    icon: <AppstoreOutlined />,
-    label: "Tour Booking",
-    children: [
-      { key: "21", label: "Option 1" },
-      { key: "22", label: "Option 2" },
-      {
-        key: "23",
-        label: "Submenu",
-        children: [
-          { key: "231", label: "Option 1" },
-          { key: "232", label: "Option 2" },
-          { key: "233", label: "Option 3" },
-        ],
-      },
-      {
-        key: "24",
-        label: "Submenu 2",
-        children: [
-          { key: "241", label: "Option 1" },
-          { key: "242", label: "Option 2" },
-          { key: "243", label: "Option 3" },
-        ],
-      },
-    ],
-  },
-  {
-    key: "3",
-    icon: <SettingOutlined />,
-    label: "Table Reservation",
-    children: [
-      { key: "31", label: "Option 1" },
-      { key: "32", label: "Option 2" },
-      { key: "33", label: "Option 3" },
-      { key: "34", label: "Option 4" },
-    ],
-  },
-];
 export default function History() {
   const navigate = useNavigate();
+  const [bookedTours, setBookedTours] = useState<BookingTour[]>([]);
+  const [bookedReservations, setBookedReservations] = useState<Reservation[]>(
+    []
+  );
+  const [bookedOrders, setBookedOrders] = useState<Order[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tours = await TourBookingService.getBookedTours();
+        const reservations = await ReservationService.getBookedReservations();
+        const orders = await OrderService.getOrdersByUser();
+
+        setBookedTours(tours.data);
+        setBookedReservations(reservations.data);
+        setBookedOrders(orders.data);
+      } catch (err) {
+        message.error("Failed to fetch data.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const items: MenuItem[] = [
+    {
+      key: "1",
+      icon: <MailOutlined />,
+      label: "Online Menu",
+      children: bookedOrders.map((order) => ({
+        key: order.id,
+        label: (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              backgroundColor: "",
+            }}>
+            <Typography.Text>Name: {order.name}</Typography.Text>
+            <Typography.Text>Mobile: {order.mobile}</Typography.Text>
+            <Typography.Text>
+              Date: {new Date(order.date).toLocaleDateString()}
+            </Typography.Text>
+            <Typography.Text>Total: {order.total}</Typography.Text>
+            <Divider />
+          </div>
+        ),
+      })),
+    },
+    {
+      key: "2",
+      icon: <AppstoreOutlined />,
+      label: "Tour Booking",
+      children: bookedTours.map((tour) => ({
+        key: tour.id,
+        label: (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+            }}>
+            <Typography.Text>Name: {tour.name}</Typography.Text>
+            <Typography.Text>Mobile: {tour.mobile}</Typography.Text>
+            <Typography.Text>Date: {tour.date}</Typography.Text>
+            <Typography.Text>
+              Participants: {tour.maxParticipants}
+            </Typography.Text>
+            <Divider />
+          </div>
+        ),
+      })),
+    },
+    {
+      key: "3",
+      icon: <SettingOutlined />,
+      label: "Table Reservation",
+      children: bookedReservations.map((res) => ({
+        key: res.id,
+        label: (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+            }}>
+            <Typography.Text>Name: {res.name}</Typography.Text>
+            <Typography.Text>Mobile: {res.mobile}</Typography.Text>
+            <Typography.Text>
+              Date: {new Date(res.date).toLocaleDateString()}
+            </Typography.Text>
+            <Typography.Text>Participants: {res.noPersons}</Typography.Text>
+            <Divider />
+          </div>
+        ),
+      })),
+    },
+  ];
 
   return (
     <Container>
@@ -95,6 +147,13 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  .ant-menu-item {
+    height: 100%;
+  }
+  .ant-menu-item.ant-menu-item-only-child {
+    padding-top: 1rem;
+    padding-left: 1rem !important;
+  }
 `;
 
 const MainContent = styled.div`
