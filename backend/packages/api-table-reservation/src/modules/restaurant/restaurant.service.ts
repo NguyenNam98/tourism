@@ -27,27 +27,15 @@ export class RestaurantService {
     return p.identifiers[0].id;
   }
 
-  async getRestaurantById(id: string): Promise<{
-    restaurant: Restaurant;
-    tables: RestaurantTable[];
-  }> {
+  async getRestaurantById(id: string): Promise<Restaurant> {
     const restaurant = await this.masterConnection
       .getRepository(Restaurant)
       .findOne({ where: { id } });
     if (!restaurant) {
       throw new BusinessException("Restaurant not found");
     }
-    const tables = await this.masterConnection
-      .getRepository(RestaurantTable)
-      .find({
-        where: {
-          restaurantId: id,
-        },
-      });
-    return {
-      restaurant,
-      tables,
-    };
+
+    return restaurant;
   }
 
   async getListRestaurant(): Promise<Restaurant[]> {

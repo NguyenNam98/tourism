@@ -1,4 +1,10 @@
-import { IsDate, IsNotEmpty, IsNumber, IsString, Min } from "class-validator";
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Min,
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateRestaurantDto {
@@ -46,15 +52,10 @@ export class CreateReservationDto {
   noPersons: number;
 
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  tableId: string;
-
-  @IsString()
   @ApiProperty({ required: false })
   note: string;
 
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
   @ApiProperty({ description: "Date and time of the reservation" })
   date: Date;

@@ -63,12 +63,7 @@ export class RestaurantController {
   @UsePipes(ValidationPipe)
   async getDetailRestaurant(
     @Param("id") id: string // Capture the route parameter
-  ): Promise<
-    TBaseDto<{
-      restaurant: Restaurant;
-      tables: RestaurantTable[];
-    }>
-  > {
+  ): Promise<TBaseDto<Restaurant>> {
     return {
       data: await this.restaurantService.getRestaurantById(id),
     };

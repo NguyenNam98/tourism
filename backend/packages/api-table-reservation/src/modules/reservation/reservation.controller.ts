@@ -28,7 +28,7 @@ import { MetaData } from "../../decorators/metaData.decorator";
 export class ReservationController {
   constructor(private readonly tourService: ReservationService) {}
 
-  @Post(":restaurantId")
+  @Post("/:restaurantId")
   @UsePipes(ValidationPipe)
   async bookTable(
     @Body() restaurant: CreateReservationDto,
@@ -51,9 +51,9 @@ export class ReservationController {
   @UsePipes(ValidationPipe)
   async getListBooked(@MetaData() meta: TMetaData): Promise<TBaseDto<{}>> {
     const userId = meta.userId;
-    await this.tourService.getListBooked(userId);
+    const tours = await this.tourService.getListBooked(userId);
     return {
-      data: {},
+      data: tours,
     };
   }
 }
