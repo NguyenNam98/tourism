@@ -141,7 +141,7 @@ export abstract class BaseAuthenticateService
 
   async login(
     authLoginUserDto: AuthLoginUserDto
-  ): Promise<{ tokenPair: TTokenPair; id: string }> {
+  ): Promise<{ tokenPair: TTokenPair; id: string; userData: Auth }> {
     const { email, password } = authLoginUserDto;
     const authData = await this.validateLogin(email, password);
 
@@ -156,7 +156,9 @@ export abstract class BaseAuthenticateService
       this.createTokenHistory(authData.id, tokenPair.rts),
     ]);
 
-    return { tokenPair, id: authData.id };
+    const userData = await this.getUserAuthInformation(authData.id);
+
+    return { tokenPair, id: authData.id, userData };
   }
 
   private async updateLoginHistory(uid: string): Promise<string> {

@@ -47,10 +47,12 @@ export abstract class BaseAuthenticateController
   @UsePipes(ValidationPipe)
   async login(@Body() loginData: AuthLoginUserDto, @Res() res) {
     const result = await this.authenticateService.login(loginData);
+
     this.authenticateService.setCookies(res, result.tokenPair);
     return res.send({
       data: {
         userId: result.id,
+        userData: result.userData,
       },
     });
   }
