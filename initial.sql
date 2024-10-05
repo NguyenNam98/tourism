@@ -64,18 +64,6 @@ CREATE TABLE reservation.restaurant (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
--- Restaurant tables for reservations
-CREATE TABLE reservation.restaurant_table (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    is_valid BOOLEAN DEFAULT TRUE NOT NULL,
-    table_number INT NOT NULL,
-    restaurant_id UUID NOT NULL REFERENCES reservation.restaurant(id),
-    number_seat INT NOT NULL, -- Number of seats at the table
-    detail TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
 -- ===========================
 -- Reservation Schema
 -- ===========================
@@ -83,11 +71,13 @@ CREATE TABLE reservation.reservation (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     is_valid BOOLEAN DEFAULT TRUE NOT NULL,
     restaurant_id UUID NOT NULL REFERENCES reservation.restaurant(id),
-    table_id UUID NOT NULL REFERENCES reservation.restaurant_table(id),
-    note TEXT NOT NULL,
+    note TEXT NULL,
     user_id UUID NOT NULL REFERENCES privacy.auth(id),
-    start_at TIMESTAMP NOT NULL,
-    end_at TIMESTAMP NOT NULL,
+    date TIMESTAMP NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    mobile VARCHAR(15) NOT NULL,
+    no_persons INT NOT NULL,
+
     status INT DEFAULT 1 NOT NULL, -- 1: in-progress, 2: finished, 3: canceled
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -115,12 +105,29 @@ CREATE TABLE "order".menu_item (
 -- ===========================
 CREATE TABLE "order"."order" (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    table_id UUID NOT NULL REFERENCES reservation.restaurant_table(id),
     is_valid BOOLEAN DEFAULT TRUE NOT NULL,
-    restaurant_id UUID NOT NULL REFERENCES reservation.restaurant(id),
     user_id UUID NOT NULL REFERENCES privacy.auth(id),
-    items UUID[] DEFAULT '{}' NOT NULL, -- Array of menu item UUIDs
+    name VARCHAR(16) NOT NULL,
+    mobile VARCHAR NOT NULL,
+    date TIMESTAMP NOT NULL,
+    card_number VARCHAR(16) NOT NULL,
+    expiry_date TIMESTAMP NOT NULL,
+    cvv VARCHAR(4) NOT NULL,
     status INT NOT NULL, -- 1: in-progress, 2: paid, 3: canceled
+    total DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+-- ===========================
+-- Order Items Schema
+-- ===========================
+CREATE TABLE "order".order_item (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    order_id VARCHAR NULL,
+    menu_item_id UUID NOT NULL REFERENCES "order".menu_item(id),
+    price DECIMAL(10, 2) NOT NULL,
+    quantity INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -138,18 +145,6 @@ CREATE TABLE tour.tour (
     max_participant INT NOT NULL, -- Max participants allowed
     image VARCHAR(255) NOT NULL,
     rating FLOAT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
--- Tour services (additional services that can be part of the tour)
-CREATE TABLE tour.tour_services (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    is_valid BOOLEAN DEFAULT TRUE NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    tour_id UUID NOT NULL REFERENCES tour.tour(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -172,7 +167,6 @@ CREATE TABLE tour.booking_tour (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
 
 -- ===========================
 -- Data Insertion (sample)
