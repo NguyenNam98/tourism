@@ -1,6 +1,6 @@
 import {
   IsArray,
-  IsDate,
+  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -42,7 +42,7 @@ export class CreateOrderDto {
   @ApiProperty()
   mobile: string;
 
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
   @ApiProperty({ description: "Date and time of the order" })
   date: Date;
@@ -52,7 +52,7 @@ export class CreateOrderDto {
   @ApiProperty()
   cardNumber: string;
 
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
   @ApiProperty({ description: "Expiry date of the card" })
   expiryDate: Date;

@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Order } from "./order.entity";
 
-@Entity("order_item")
+@Entity("order_item", { schema: "order" })
 export class OrderItem {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
