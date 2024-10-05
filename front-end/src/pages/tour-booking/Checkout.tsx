@@ -24,6 +24,7 @@ export default function CheckoutTourBooking() {
   const { tourId } = useParams();
   const [currentTour, setCurrentTour] = useState<Tour | null>(null);
   const [participants, setParticipants] = useState<number>(0);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,10 +38,6 @@ export default function CheckoutTourBooking() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log(form.getFieldsValue());
-  }, [form]);
-
   if (!currentTour) return <LoadingOutlined />;
   return (
     <Container>
@@ -48,7 +45,6 @@ export default function CheckoutTourBooking() {
         <HeaderContent>
           <Button
             type="link"
-            shape="circle"
             icon={
               <LeftOutlined style={{ fontSize: "36px", color: "#000000" }} />
             }

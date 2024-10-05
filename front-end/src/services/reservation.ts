@@ -1,30 +1,22 @@
 import { get, post, put, ServicePrefix } from "./baseApiService";
-interface CreateReservationDto {
-  tableId: string;
-  userId: string;
-  startAt: string;
-  endAt: string;
-  note: string;
-}
 
 export interface Reservation {
   id: string;
-  restaurantId: string;
-  tableId: string;
   userId: string;
-  startAt: string;
-  endAt: string;
+  restaurantId: string;
+  date: Date;
+  name: string;
+  mobile: string;
+  noPersons: number;
   note: string;
-  status: number;
 }
 
 export const ReservationService = {
   bookTable: async (
-    restaurantId: string,
-    reservationData: CreateReservationDto
+    reservationData: Partial<Reservation>
   ): Promise<{ data: string }> => {
     return await post(
-      `/${ServicePrefix.TableReservation}/reservation/${restaurantId}`,
+      `/${ServicePrefix.TableReservation}/reservation/${reservationData.restaurantId}`,
       reservationData
     );
   },

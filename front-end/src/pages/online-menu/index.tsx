@@ -59,7 +59,6 @@ export default function OnlineMenu() {
         <HeaderContent>
           <Button
             type="link"
-            shape="circle"
             icon={
               <LeftOutlined style={{ fontSize: "36px", color: "#000000" }} />
             }

@@ -48,7 +48,7 @@ export const RestaurantService = {
   getRestaurantById: async (
     restaurantId: string
   ): Promise<{
-    data: { restaurant: Restaurant; tables: RestaurantTable[] };
+    data: Restaurant;
   }> => {
     return await get(
       `/${ServicePrefix.TableReservation}/restaurant/${restaurantId}`

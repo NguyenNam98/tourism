@@ -13,7 +13,6 @@ export default function TableReservation() {
         <HeaderContent>
           <Button
             type="link"
-            shape="circle"
             icon={
               <LeftOutlined style={{ fontSize: "36px", color: "#ffffff" }} />
             }
