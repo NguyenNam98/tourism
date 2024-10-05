@@ -203,13 +203,19 @@ export default function CheckoutTableReservation() {
           <Divider />
           <StickyBox>
             <StickyBoxContent
-              onClick={() => {
+              onClick={async () => {
+                console.log(currentRestaurant);
                 try {
-                  ReservationService.bookTable({
-                    userId: localStorage.getItem("userId") || "",
+                  const response = await ReservationService.bookTable({
                     ...reservation,
+                    userId: localStorage.getItem("userId") || "",
+                    restaurantId: currentRestaurant?.id,
                   });
 
+                  if (response.error) {
+                    message.error(response.message ?? "Invalid information");
+                    return;
+                  }
                   navigate("/thank-you");
                 } catch (err) {
                   message.error("Error when booking");
