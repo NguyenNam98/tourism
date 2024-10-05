@@ -14,7 +14,8 @@ export interface Reservation {
 export const ReservationService = {
   bookTable: async (
     reservationData: Partial<Reservation>
-  ): Promise<{ data: string }> => {
+  ): Promise<{ data: string; error: string; message: string }> => {
+    console.log(reservationData);
     return await post(
       `/${ServicePrefix.TableReservation}/reservation/${reservationData.restaurantId}`,
       reservationData

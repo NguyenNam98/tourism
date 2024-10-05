@@ -19,7 +19,9 @@ export interface Order {
 }
 
 export const OrderService = {
-  createOrder: async (order: Partial<Order>): Promise<{ data: string }> => {
+  createOrder: async (
+    order: Partial<Order>
+  ): Promise<{ data: string; error: string; message: string }> => {
     return await post(`/${ServicePrefix.OnlineMenu}/order`, order);
   },
 
