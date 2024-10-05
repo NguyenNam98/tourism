@@ -29,17 +29,23 @@ export class ReservationService {
     if (!restaurant) {
       throw new BusinessException("Restaurant not found");
     }
-    const reservation = await this.masterConnection
+    const reservationByTableId = await this.masterConnection
       .getRepository(Reservation)
       .findOne({
         where: {
           status: 1, // 1: reserved
-          userId,
           ...data,
         },
       });
-
-    return reservation.id;
+    if (reservationByTableId) {
+      throw new BusinessException("Table has been reserved");
+    }
+    const p = await this.masterConnection.getRepository(Reservation).insert({
+      status: 1, // 1: reserved
+      userId,
+      ...data,
+    });
+    return p.identifiers[0].id;
   }
 
   async CancelBookTable(id: string) {
