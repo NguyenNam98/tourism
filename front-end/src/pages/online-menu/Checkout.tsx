@@ -91,9 +91,9 @@ export default function CheckoutOnlineMenu() {
             <Meta
               avatar={<Avatar src={food.image} />}
               title={food.title}
-              description={`${food.price} x ${food.quantity} = ${
+              description={`${food.price} x ${food.quantity} = ${Number(
                 food.price * food.quantity
-              }$`}
+              ).toFixed(2)}$`}
             />
           </StyledCard>
         ))}
@@ -101,7 +101,9 @@ export default function CheckoutOnlineMenu() {
         <Typography.Title>Summary</Typography.Title>
         <RowFlexBox>
           <Typography.Text>Subtotal</Typography.Text>
-          <Typography.Text>{orderInfo.total} $</Typography.Text>
+          <Typography.Text>
+            {Number(orderInfo.total).toFixed(2)} $
+          </Typography.Text>
         </RowFlexBox>
         <RowFlexBox>
           <Typography.Text>Discount</Typography.Text>
@@ -117,7 +119,7 @@ export default function CheckoutOnlineMenu() {
             Total
           </Typography.Text>
           <Typography.Text style={{ color: "#347928", fontWeight: 700 }}>
-            {orderInfo.total} $
+            {Number(orderInfo.total).toFixed(2)} $
           </Typography.Text>
         </RowFlexBox>
 
@@ -208,12 +210,16 @@ export default function CheckoutOnlineMenu() {
 
           <StickyBox>
             <StickyBoxContent
-              onClick={() => {
+              onClick={async () => {
                 try {
-                  OrderService.createOrder({
-                    userId: localStorage.getItem("userId") || "",
+                  const response = await OrderService.createOrder({
                     ...orderInfo,
+                    userId: localStorage.getItem("userId") || "",
                   });
+                  if (response.error) {
+                    message.error(response.error ?? "Invalid information");
+                    return;
+                  }
                   navigate("/thank-you");
                 } catch (err) {
                   message.error("Error when booking");
