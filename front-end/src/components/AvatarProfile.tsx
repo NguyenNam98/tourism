@@ -11,7 +11,6 @@ export default function AvatarProfile() {
       label: (
         <a
           onClick={() => {
-            localStorage.clear();
             navigate("/history");
           }}>
           History

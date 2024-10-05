@@ -1,52 +1,70 @@
 import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
+  AppstoreOutlined,
   LeftOutlined,
+  MailOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
-import type { GetProps } from "antd";
-import { Button, Card, Image, Input, message, Typography } from "antd";
-import Meta from "antd/es/card/Meta";
-import { useEffect, useState } from "react";
+import type { MenuProps } from "antd";
+import { Button, Menu } from "antd";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AvatarProfile from "~/components/AvatarProfile";
-import { BookingTour, Tour, TourBookingService } from "~/services/tour";
 
-type SearchProps = GetProps<typeof Input.Search>;
-const { Search } = Input;
+type MenuItem = Required<MenuProps>["items"][number];
 
+const items: MenuItem[] = [
+  {
+    key: "1",
+    icon: <MailOutlined />,
+    label: "Online Menu",
+    children: [
+      { key: "11", label: "Option 1" },
+      { key: "12", label: "Option 2" },
+      { key: "13", label: "Option 3" },
+      { key: "14", label: "Option 4" },
+    ],
+  },
+  {
+    key: "2",
+    icon: <AppstoreOutlined />,
+    label: "Tour Booking",
+    children: [
+      { key: "21", label: "Option 1" },
+      { key: "22", label: "Option 2" },
+      {
+        key: "23",
+        label: "Submenu",
+        children: [
+          { key: "231", label: "Option 1" },
+          { key: "232", label: "Option 2" },
+          { key: "233", label: "Option 3" },
+        ],
+      },
+      {
+        key: "24",
+        label: "Submenu 2",
+        children: [
+          { key: "241", label: "Option 1" },
+          { key: "242", label: "Option 2" },
+          { key: "243", label: "Option 3" },
+        ],
+      },
+    ],
+  },
+  {
+    key: "3",
+    icon: <SettingOutlined />,
+    label: "Table Reservation",
+    children: [
+      { key: "31", label: "Option 1" },
+      { key: "32", label: "Option 2" },
+      { key: "33", label: "Option 3" },
+      { key: "34", label: "Option 4" },
+    ],
+  },
+];
 export default function History() {
   const navigate = useNavigate();
-  const [tours, setTours] = useState<Tour[]>([]);
-  const [bookedTours, setBookedTours] = useState<BookingTour[]>([]);
-  const [isOpenBookedTours, setIsOpenBookedTours] = useState<boolean>(false);
-
-  const onSearch: SearchProps["onSearch"] = (value) => {
-    const keyword = value.toLowerCase();
-
-    const searchedTours = tours.filter(
-      (tour) =>
-        tour.title.toLowerCase().includes(keyword) ||
-        tour.description.toLowerCase().includes(keyword)
-    );
-    setTours(searchedTours);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await TourBookingService.getListTour();
-        const bookedTours = await TourBookingService.getBookedTours();
-
-        setBookedTours(bookedTours.data);
-        setTours(response.data);
-      } catch (err) {
-        message.error("Failed to fetch restaurants.");
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <Container>
@@ -62,91 +80,11 @@ export default function History() {
             }}></Button>
           <AvatarProfile />
         </HeaderContent>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-          }}>
-          <div>
-            <Typography.Title>Tour Booking</Typography.Title>
-            <Typography.Text>Let's Travel</Typography.Text>
-          </div>
-          <Image
-            preview={false}
-            width={200}
-            height={200}
-            src="https://img.freepik.com/premium-vector/airplane-illustration_961307-16846.jpg"
-          />
-        </div>
-
-        <Button
-          type="primary"
-          icon={
-            isOpenBookedTours ? (
-              <ArrowUpOutlined style={{ color: "#000000" }} />
-            ) : (
-              <ArrowDownOutlined style={{ color: "#000000" }} />
-            )
-          }
-          onClick={() => {
-            setIsOpenBookedTours(!isOpenBookedTours);
-          }}>
-          Booked Tours
-        </Button>
-        {isOpenBookedTours && (
-          <ListCardContent>
-            {bookedTours.map((tour) => {
-              const selectedTour = tours.find((t) => t.id === tour.tourId);
-
-              return (
-                <StyledCard
-                  key={tour.id}
-                  cover={<Image src={selectedTour?.image} />}>
-                  <Meta
-                    title={selectedTour?.title}
-                    description={
-                      <>
-                        <CardText>
-                          Participants: {tour.maxParticipants}
-                        </CardText>
-                        <CardText>Date: {tour.date}</CardText>
-                        <CardText>
-                          Total: $
-                          {tour.maxParticipants * (selectedTour?.price || 0)}
-                        </CardText>
-                      </>
-                    }
-                  />
-                </StyledCard>
-              );
-            })}
-          </ListCardContent>
-        )}
-        <Typography.Text>Where do you want to go?</Typography.Text>
-
-        <Search
-          placeholder="Search here..."
-          allowClear
-          onSearch={onSearch}
-          style={{ width: "100%" }}
+        <Menu
+          mode="inline"
+          style={{ width: "110%", marginInline: "-1rem", borderInlineEnd: 0 }}
+          items={items}
         />
-
-        <ListCardContent>
-          {tours.map((tour) => (
-            <StyledCard
-              onClick={() => {
-                navigate(`/tour-booking/checkout/${tour.id}`);
-              }}
-              cover={<Image src={tour.image} />}
-              key={tour.id}
-              actions={[
-                <CardText>A${tour.price}</CardText>,
-                <CardText>{tour.rating} ⭐</CardText>,
-              ]}>
-              <Meta title={tour.title} description={tour.location} />
-            </StyledCard>
-          ))}
-        </ListCardContent>
       </MainContent>
     </Container>
   );
@@ -173,32 +111,4 @@ const HeaderContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-
-const ListCardContent = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columns */
-  gap: 1rem;
-`;
-const StyledCard = styled(Card)`
-  width: 10rem;
-  height: 15rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  .ant-card-body {
-    padding: 0.5rem;
-  }
-  .ant-image-img {
-    height: 7rem;
-  }
-  &:hover {
-    cursor: pointer;
-    background-color: #f5f5f7;
-  }
-`;
-
-const CardText = styled.p`
-  font-size: 1rem;
-  margin: 0;
 `;
