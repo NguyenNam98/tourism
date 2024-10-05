@@ -1,6 +1,5 @@
-import {IsDate, IsNotEmpty, IsNumber, IsString} from "class-validator";
-import {ApiProperty} from "@nestjs/swagger";
-
+import { IsDate, IsNotEmpty, IsNumber, IsString, Min } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateRestaurantDto {
   @IsString()
@@ -20,6 +19,31 @@ export class CreateRestaurantDto {
 }
 
 export class CreateReservationDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  userId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  restaurantId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  mobile: string;
+
+  @IsNumber()
+  @Min(1)
+  @IsNotEmpty()
+  @ApiProperty({ description: "Number of persons in the reservation" })
+  noPersons: number;
 
   @IsString()
   @IsNotEmpty()
@@ -27,17 +51,11 @@ export class CreateReservationDto {
   tableId: string;
 
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({ required: false })
   note: string;
 
   @IsDate()
   @IsNotEmpty()
-  @ApiProperty()
-  startAt: Date;
-
-  @IsDate()
-  @IsNotEmpty()
-  @ApiProperty()
-  endAt!: Date;
+  @ApiProperty({ description: "Date and time of the reservation" })
+  date: Date;
 }

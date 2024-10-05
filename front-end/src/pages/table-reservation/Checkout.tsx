@@ -209,6 +209,7 @@ export default function CheckoutTableReservation() {
                     userId: localStorage.getItem("userId") || "",
                     ...reservation,
                   });
+
                   navigate("/thank-you");
                 } catch (err) {
                   message.error("Error when booking");
