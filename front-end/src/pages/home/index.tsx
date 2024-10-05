@@ -23,22 +23,22 @@ export default function Home() {
         <CarouselContainer>
           <StyledCarousel autoplay autoplaySpeed={2000}>
             <img
-              src="https://images.pexels.com/photos/1371360/pexels-photo-1371360.jpeg?cs=srgb&dl=pexels-te-lensfix-380994-1371360.jpg&fm=jpg"
+              src="https://blog.stepes.com/wp-content/uploads/2015/09/tourism20150818-1.jpg"
               alt="Slide 1"
               height={300}
             />
             <img
-              src="https://static.toiimg.com/photo/103974251.cms"
+              src="https://media.istockphoto.com/id/1031430214/photo/young-woman-kayaking-through-the-backwaters-of-monroe-island.jpg?s=612x612&w=0&k=20&c=kbv2s1kknMzJgk8Nd-W2VNIf0AFx48YtCqygtI3Ppos="
               alt="Slide 2"
               height={300}
             />
             <img
-              src="https://www.servest.co.za/wp-content/uploads/2019/10/Tourism-FM-Article.jpg"
+              src="https://cdn.pixabay.com/photo/2018/08/16/08/39/hallstatt-3609863_640.jpg"
               alt="Slide 3"
               height={300}
             />
             <img
-              src="https://www.talaviation.com/Talaviation/UploadFiles/pgallery/201612711253290.jpg"
+              src="https://images.pexels.com/photos/1268855/pexels-photo-1268855.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
               alt="Slide 4"
               height={300}
             />
