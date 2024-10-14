@@ -4,6 +4,8 @@ CREATE SCHEMA tour;
 CREATE SCHEMA reservation;
 CREATE SCHEMA "order";
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- ===========================
 -- User Authentication Schema
 -- ===========================
