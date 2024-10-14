@@ -20,12 +20,13 @@ export class DatabaseModule {
         entities: ["dist/entities/**/*{.ts,.js}"],
         name: connection.NAME,
         autoLoadEntities: true,
+        ssl: true,
         replication: {
           master: {
-            // host: process.env.DB_HOST,
+            host: "host.docker.internal",
             port: 5432,
-            // username: process.env.DB_USERNAME,
-            // password: process.env.DB_PASSWORD,
+            username: "postgres",
+           password: "123456",
             database: "tourism",
           },
           slaves: [],

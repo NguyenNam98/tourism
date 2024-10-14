@@ -5,10 +5,10 @@ import { Request, Response, NextFunction } from 'express';
 @Injectable()
 export class ProxyMiddlewareAPI implements NestMiddleware {
     async use(req: Request, res: Response, next: NextFunction) {
-        const apiAuth = 'http://localhost:7801';
-        const apiBookTour = 'http://localhost:7802';
-        const apiOrderMenu = 'http://localhost:7803';
-        const apiTableReservation = 'http://localhost:7804';
+        const apiAuth = 'http://api-auth:7801';
+        const apiBookTour = 'http://api-book-tour:7802';
+        const apiOrderMenu = 'http://api-order-menu:7803';
+        const apiTableReservation = 'http://api-table-reservation:7804';
         // Create a proxy middleware for API requests
 
         // Route requests based on URL path

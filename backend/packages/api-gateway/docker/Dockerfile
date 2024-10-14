@@ -10,6 +10,7 @@ RUN yarn install
 COPY . .
 
 # Build the application
+RUN npm install -g @nestjs/cli@8.2.1
 RUN yarn run build
 
 FROM --platform=linux/X86_64 node:18-alpine
@@ -19,7 +20,6 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/package.json ./package.json
 COPY --from=builder /usr/src/app/dist ./dist
-COPY --from=builder /usr/src/app/.awsConfVer.yaml ./.awsConfVer.yaml
 
 COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh

@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  api-gateway:
+      build:
+        context: ./packages/api-gateway
+        dockerfile: docker/Dockerfile
+      ports:
+        - "7810:7810"
+      expose:
+        - "7810"
+      networks:
+        - tourism-network
+
+  api-auth:
+    build:
+      context: ./packages/api-auth
+      dockerfile: docker/Dockerfile
+    ports:
+      - "7801:7801"
+    networks:
+      - tourism-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  api-book-tour:
+    build:
+      context: ./packages/api-book-tour
+      dockerfile: docker/Dockerfile
+    ports:
+      - "7802:7802"
+    networks:
+      - tourism-network
+    extra_hosts:
+     - "host.docker.internal:host-gateway"
+
+  
+
+  api-order-menu:
+    build:
+      context: ./packages/api-order-menu
+      dockerfile: docker/Dockerfile
+    ports:
+      - "7803:7803"
+    networks:
+      - tourism-network
+    extra_hosts:
+     - "host.docker.internal:host-gateway"
+
+  api-table-reservation:
+    build:
+      context: ./packages/api-table-reservation
+      dockerfile: docker/Dockerfile
+    ports:
+      - "7804:7804"
+    networks:
+      - tourism-network
+    extra_hosts:
+     - "host.docker.internal:host-gateway"
+
+networks:
+  tourism-network:
+    driver: host

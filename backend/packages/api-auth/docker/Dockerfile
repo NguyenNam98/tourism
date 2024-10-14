@@ -10,6 +10,7 @@ RUN yarn install
 COPY . .
 
 # Build the application
+RUN npm install -g @nestjs/cli@8.2.1
 RUN yarn run build
 
 FROM --platform=linux/X86_64 node:18-alpine
