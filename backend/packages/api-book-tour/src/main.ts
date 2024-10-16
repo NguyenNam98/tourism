@@ -95,11 +95,11 @@ async function createNestServer(serverExpress: express.Express) {
     res.sendStatus(200);
   });
 
-  const isLocal = process.env.ENV === 'develop';
+  const isLocal = !process.env.ENV || process.env.ENV === 'develop';
   if (isLocal) {
     const config = new DocumentBuilder()
-      .setTitle('API book tour')
-      .setDescription('The API for book tour service')
+      .setTitle('Tour Booking API')
+      .setDescription('The API for booking tour service')
       .setVersion('1.0')
       .build();
     const document = SwaggerModule.createDocument(app, config);

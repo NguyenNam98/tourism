@@ -2,15 +2,15 @@ version: '3.8'
 
 services:
   api-gateway:
-      build:
-        context: ./packages/api-gateway
-        dockerfile: docker/Dockerfile
-      ports:
-        - "7810:7810"
-      expose:
-        - "7810"
-      networks:
-        - tourism-network
+    build:
+      context: ./packages/api-gateway
+      dockerfile: docker/Dockerfile
+    ports:
+      - "7810:7810"
+    expose:
+      - "7810"
+    networks:
+      - tourism-network
 
   api-auth:
     build:
@@ -18,10 +18,13 @@ services:
       dockerfile: docker/Dockerfile
     ports:
       - "7801:7801"
+    expose:
+      - "7801"
     networks:
       - tourism-network
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    
 
   api-book-tour:
     build:
@@ -29,6 +32,8 @@ services:
       dockerfile: docker/Dockerfile
     ports:
       - "7802:7802"
+    expose:
+      - "7802"
     networks:
       - tourism-network
     extra_hosts:
@@ -42,6 +47,8 @@ services:
       dockerfile: docker/Dockerfile
     ports:
       - "7803:7803"
+    expose:
+      - "7803"
     networks:
       - tourism-network
     extra_hosts:
@@ -53,6 +60,8 @@ services:
       dockerfile: docker/Dockerfile
     ports:
       - "7804:7804"
+    expose:
+      - "7804"
     networks:
       - tourism-network
     extra_hosts:
@@ -60,4 +69,4 @@ services:
 
 networks:
   tourism-network:
-    driver: host
+    driver: bridge
